@@ -15,7 +15,6 @@ import java.awt.*;
 //import javax.imageio.ImageIO;
 //import javax.imageio.*;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicMenuBarUI;
 
 import java.awt.event.*;
 //import java.awt.image.BufferedImage;
@@ -238,7 +237,7 @@ public class Main{
         
         //Panel
         panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(600, 330));
+        panel.setPreferredSize(new Dimension(600, 370));
         
         //Toolbar
         UIManager.put("MenuItem.selectionBackground", Color.RED);
@@ -370,6 +369,7 @@ public class Main{
 			public void actionPerformed(ActionEvent e) {
 				cardlayout.show(cpanel, "c");
 				flip = 2;
+                panel.setPreferredSize(new Dimension(400, 400));
 				tpanel.setBackground(Color.BLACK);
 				lpanel.setBackground(Color.BLACK);
 				rpanel.setBackground(Color.BLACK);

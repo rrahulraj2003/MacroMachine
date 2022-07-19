@@ -65,7 +65,6 @@ public class CreateMenu extends JPanel{
 		JLabel nameanddesc = new JLabel("Name and Description");
 		JTextField namefield = new JTextField();
 		TextPrompt nametext = new TextPrompt("Name", namefield); nametext.getClass(); //to get rid of yellow line
-		JLabel info = new JLabel("Info:");
 		JTextField infofield = new JTextField();
 		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
 		JLabel recordhotkey = new JLabel("Record Hotkey");
@@ -75,13 +74,13 @@ public class CreateMenu extends JPanel{
 		JLabel recordmacro = new JLabel("Record Macro");
 		JButton record = new JButton("Record");
 		
-		namefield.setPreferredSize(new Dimension(400, 25));
-		infofield.setPreferredSize(new Dimension(400, 25));
+		namefield.setPreferredSize(new Dimension(400, 23));
+		infofield.setPreferredSize(new Dimension(400, 23));
 		generalcard.setBackground(Color.WHITE);
 		generalcard.setLayout(new GridBagLayout());
 		GridBagConstraints g = new GridBagConstraints();
 		
-		g.insets = new Insets(3, 0, 3, 0);
+		g.insets = new Insets(2, 0, 2, 0);
 		
 		g.gridx = 0;
 		g.gridy = 0;
@@ -114,6 +113,8 @@ public class CreateMenu extends JPanel{
 		g.gridy = 4;
 		g.gridwidth = 1;
 		g.fill = GridBagConstraints.HORIZONTAL;
+		recordkey.setBackground(Color.WHITE);
+		recordkey.setFocusable(false);
 		generalcard.add(recordkey, g);
 		
 		g.gridx = 1;
@@ -124,14 +125,28 @@ public class CreateMenu extends JPanel{
 		recorded.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 		generalcard.add(recorded, g);
 		
-		//uh whaaa, fix this
-		
 		g.gridx = 2;
 		g.gridy = 4;
 		g.gridwidth = 1;
 		g.fill = GridBagConstraints.HORIZONTAL;
+		settona.setBackground(Color.WHITE);
+		settona.setFocusable(false);
 		generalcard.add(settona, g);
 		
+		g.gridx = 0;
+		g.gridy = 5;
+		g.gridwidth = 3;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		recordmacro.setFont(HEAD);
+		generalcard.add(recordmacro, g);
+
+		g.gridx = 0;
+		g.gridy = 6;
+		g.gridwidth = 3;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		record.setBackground(Color.WHITE);
+		record.setFocusable(false);
+		generalcard.add(record, g);
 		
 		//CodeCard
 		codecard.setLayout(new GridLayout(1, 1));
