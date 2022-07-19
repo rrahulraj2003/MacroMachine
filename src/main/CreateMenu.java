@@ -1,0 +1,194 @@
+/*
+
+    ---------------------------
+    || RIP CreateWindow.java ||
+    ||       2022-2022       ||
+    ---------------------------
+
+*/
+package main;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class CreateMenu extends JPanel{
+	
+	private static final long serialVersionUID = 1L;
+	
+	public static Font HEAD = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+
+	public CreateMenu(){
+		
+		//Panels
+		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, Color.BLACK));
+		JPanel tpanel = new JPanel();
+		JPanel cards = new JPanel();
+		JPanel generalcard = new JPanel();
+		JPanel codecard = new JPanel();
+		JPanel saveclose = new JPanel();
+		CardLayout cardlayout = new CardLayout();
+		
+		//TPanel
+		ImageIcon icon = new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\pcreate.png");
+		JLabel createmacro = new JLabel("Create Your Macro");
+		JButton general = new JButton("General");
+		JButton code = new JButton("Code");
+		
+		add(tpanel, BorderLayout.NORTH);
+		tpanel.setLayout(new FlowLayout());
+		tpanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //remove when formatting is done
+		tpanel.setBackground(Color.WHITE);
+		tpanel.add(new JLabel(icon));
+		tpanel.add(createmacro);
+		createmacro.setBorder(BorderFactory.createEmptyBorder(4, 0, 5, 15));
+		createmacro.setFont(new Font(Font.SERIF, Font.BOLD, 18));
+		general.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		general.setBackground(Color.WHITE);
+		general.setFocusable(false);
+		general.setPreferredSize(new Dimension(70, 30));
+		code.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		code.setBackground(Color.WHITE);
+		code.setFocusable(false);
+		code.setPreferredSize(new Dimension(50, 30));
+		tpanel.add(general);
+		JLabel space = new JLabel(".");
+		space.setForeground(Color.WHITE);
+		space.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 8));
+		tpanel.add(space);
+		tpanel.add(code);
+		
+		//GeneralCard
+		JLabel nameanddesc = new JLabel("Name and Description");
+		JTextField namefield = new JTextField();
+		TextPrompt nametext = new TextPrompt("Name", namefield); nametext.getClass(); //to get rid of yellow line
+		JLabel info = new JLabel("Info:");
+		JTextField infofield = new JTextField();
+		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
+		JLabel recordhotkey = new JLabel("Record Hotkey");
+		JButton recordkey = new JButton("Record Key");
+		JTextField recorded = new JTextField();
+		JButton settona = new JButton("Set to N/A");
+		JLabel recordmacro = new JLabel("Record Macro");
+		JButton record = new JButton("Record");
+		
+		namefield.setPreferredSize(new Dimension(400, 25));
+		infofield.setPreferredSize(new Dimension(400, 25));
+		generalcard.setBackground(Color.WHITE);
+		generalcard.setLayout(new GridBagLayout());
+		GridBagConstraints g = new GridBagConstraints();
+		
+		g.insets = new Insets(3, 0, 3, 0);
+		
+		g.gridx = 0;
+		g.gridy = 0;
+		g.gridwidth = 3;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		nameanddesc.setFont(HEAD);
+		generalcard.add(nameanddesc, g);
+		
+		g.gridx = 0;
+		g.gridy = 1;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		g.ipady = 2;
+		g.gridwidth = 3;
+		generalcard.add(namefield, g);
+		
+		g.gridx = 0;
+		g.gridy = 2;
+		g.gridwidth = 3;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		generalcard.add(infofield, g);
+		
+		g.gridx = 0;
+		g.gridy = 3;
+		g.gridwidth = 3;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		recordhotkey.setFont(HEAD);
+		generalcard.add(recordhotkey, g);
+		
+		g.gridx = 0;
+		g.gridy = 4;
+		g.gridwidth = 1;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		generalcard.add(recordkey, g);
+		
+		g.gridx = 1;
+		g.gridy = 4;
+		g.gridwidth = 1;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		recorded.setPreferredSize(new Dimension(200, 25));
+		recorded.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+		generalcard.add(recorded, g);
+		
+		//uh whaaa, fix this
+		
+		g.gridx = 2;
+		g.gridy = 4;
+		g.gridwidth = 1;
+		g.fill = GridBagConstraints.HORIZONTAL;
+		generalcard.add(settona, g);
+		
+		
+		//CodeCard
+		codecard.setLayout(new GridLayout(1, 1));
+		JTextArea codearea = new JTextArea("//Macro Code Here");
+		JScrollPane scp = new JScrollPane(codearea);
+		TextPrompt scptext = new TextPrompt("", codearea); scptext.getClass();
+		codearea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		codecard.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		codecard.add(scp);
+		
+		//Cards
+		add(cards, BorderLayout.CENTER);
+		cards.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //remove when formatting is done
+		cards.setLayout(cardlayout);
+		cards.add(generalcard, "1");
+		cards.add(codecard, "2");
+		
+		//SaveCloseCard
+		JButton save = new JButton("Save");
+		JButton close = new JButton("Close");
+		save.setBackground(Color.WHITE);
+		save.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		save.setPreferredSize(new Dimension(50, 25));
+		close.setBackground(Color.WHITE);
+		close.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		close.setPreferredSize(new Dimension(55, 25));
+		add(saveclose, BorderLayout.SOUTH);
+		saveclose.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		saveclose.setLayout(new FlowLayout());
+		saveclose.setBackground(Color.WHITE);
+		saveclose.add(save);
+		saveclose.add(close);
+		
+		close.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.showGeneral();
+				Main.revert();
+			}
+		});
+		
+		general.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardlayout.show(cards, "1");
+				space.setForeground(Color.WHITE);
+			}
+		});
+		
+		code.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardlayout.show(cards, "2");
+				space.setForeground(Color.BLACK);
+			}
+		});
+		
+	}
+
+}
