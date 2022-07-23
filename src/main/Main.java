@@ -12,6 +12,7 @@ package main;
 
 import java.awt.*;
 
+import javax.print.DocFlavor.URL;
 //import javax.imageio.ImageIO;
 //import javax.imageio.*;
 import javax.swing.*;
@@ -21,6 +22,7 @@ import java.awt.event.*;
 //import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 
 
@@ -56,6 +58,12 @@ public class Main{
     private static JButton bdelete;
     private static JButton bcreate;
     private static JButton bsettings;
+
+    public static java.net.URL create = Main.class.getResource("/main/create.png");
+    public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
+    private static java.net.URL settings = Main.class.getResource("/main/settings.png");
+    private static java.net.URL psettings = Main.class.getResource("/main/psettings.png");
+    private static java.net.URL black = Main.class.getResource("/main/black.png");
     
     //Basic Colors
     //private static final Color BK = new Color(5, 19, 54); //background color
@@ -212,10 +220,11 @@ public class Main{
 		breorder.setBackground(SKY);
 		bdelete.setBackground(SKY);
 		tpanel.setPreferredSize(new Dimension(600, 50));
-		bcreate.setIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\create.png"));
-		bcreate.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\pcreate.png"));
-		bsettings.setIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\settings.png"));
-		bsettings.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\psettings.png"));
+        bpanel.setPreferredSize(new Dimension(600, 28));
+		bcreate.setIcon(new ImageIcon(create));
+		bcreate.setPressedIcon(new ImageIcon(pcreate));
+		bsettings.setIcon(new ImageIcon(settings));
+		bsettings.setPressedIcon(new ImageIcon(psettings));
     }
     
     public static void showGeneral() {
@@ -237,21 +246,21 @@ public class Main{
         
         //Panel
         panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(600, 370));
+        panel.setPreferredSize(new Dimension(600, 350));
         
         //Toolbar
         UIManager.put("MenuItem.selectionBackground", Color.RED);
         JMenu file = new JMenu("File");
         JMenu edit = new JMenu("Edit");
         JMenu omg = new JMenu("omg");
-        JMenu settings = new JMenu("Settings");
+        JMenu fsettings = new JMenu("Settings");
         JMenu help = new JMenu("Help");
         //menubar.setBackground(Color.WHITE);
         menubar.setBorder(BorderFactory.createEmptyBorder());
         menubar.add(file);
         menubar.add(edit);
         menubar.add(omg);
-        menubar.add(settings);
+        menubar.add(fsettings);
         menubar.add(help);
         frame.setJMenuBar(menubar);				//add or subtract menubar?
         
@@ -266,18 +275,18 @@ public class Main{
         title.setForeground(Color.BLACK);
         tpanel.add(title, BorderLayout.CENTER);
         
-        bcreate = new JButton(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\create.png"));
+        bcreate = new JButton(new ImageIcon(create));
         bcreate.setBackground(Color.WHITE);
         bcreate.setFocusable(false);
         bcreate.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        bcreate.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\pcreate.png"));
+        bcreate.setPressedIcon(new ImageIcon(pcreate));
         tpanel.add(bcreate, BorderLayout.WEST);
         
-        bsettings = new JButton(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\settings.png"));
+        bsettings = new JButton(new ImageIcon(settings));
         bsettings.setBackground(SKY);
         bsettings.setFocusable(false);
         bsettings.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        bsettings.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\psettings.png"));
+        bsettings.setPressedIcon(new ImageIcon(psettings));
         tpanel.add(bsettings, BorderLayout.EAST);
         
         panel.add(tpanel, BorderLayout.NORTH);
@@ -287,6 +296,7 @@ public class Main{
         bottom.setForeground(Color.BLACK);
         bpanel.add(bottom);
         bpanel.setBackground(SKY);
+        bpanel.setPreferredSize(new Dimension(600, 28));
         panel.add(bpanel, BorderLayout.SOUTH);
         
         //LPanel
@@ -336,7 +346,7 @@ public class Main{
         
         //CPanel, the motherload, container of the "cards"
         JPanel mainmenu = new JPanel();
-        JPanel createmenu = new CreateMenu();
+        CreateMenu createmenu = new CreateMenu();
         JPanel settingsmenu = new JPanel();
         
         panel.add(cpanel, BorderLayout.CENTER);
@@ -380,11 +390,12 @@ public class Main{
 				bedit.setBackground(Color.BLACK);
 				breorder.setBackground(Color.BLACK);
 				bdelete.setBackground(Color.BLACK);
-				tpanel.setPreferredSize(new Dimension(600, 30));
-				bcreate.setIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\black.png"));
-				bcreate.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\black.png"));
-				bsettings.setIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\black.png"));
-				bsettings.setPressedIcon(new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\black.png"));
+				tpanel.setPreferredSize(new Dimension(600, 20));
+                bpanel.setPreferredSize(new Dimension(600, 20));
+				bcreate.setIcon(new ImageIcon(black));
+				bcreate.setPressedIcon(new ImageIcon(black));
+				bsettings.setIcon(new ImageIcon(black));
+				bsettings.setPressedIcon(new ImageIcon(black));
 				//new CreateWindow(); //RIP CreateWindow
 			}
         	
@@ -422,7 +433,10 @@ public class Main{
         	//Action Creation
             @Override
             public void keyPressed(KeyEvent e) { //"m" = 77, "a" = 65
-                keyPress(e);
+                //keyPress(e);
+                if(createmenu.recording){
+                    createmenu.displayRecording(e);
+                }
             }
 
             @Override

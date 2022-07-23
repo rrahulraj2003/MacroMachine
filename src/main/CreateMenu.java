@@ -11,14 +11,39 @@ package main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 
 public class CreateMenu extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	
 	public static Font HEAD = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+
+	public boolean recording = false;
+	private JTextField recorded;
+	private StringBuilder display = new StringBuilder("empty");
+
+	public void displayRecording(KeyEvent e){
+		System.out.println(e.getKeyCode());
+
+		if(display.substring(0).equals("empty")){
+			display.delete(0, 5);
+			display.append("Ctrl");
+			recorded.setText(display.toString());
+		}else if(display.substring(0).equals("Ctrl") && e.getKeyCode() == 16){
+			display.append(" + Shift");
+			recorded.setText(display.toString());
+		}else if(display.substring(7).equals("Shift")){
+			display.append(" + " + e.getKeyChar());
+			recorded.setText(display.toString());
+			recording = false;
+		}
+		
+		
+	}
 
 	public CreateMenu(){
 		
@@ -33,7 +58,7 @@ public class CreateMenu extends JPanel{
 		CardLayout cardlayout = new CardLayout();
 		
 		//TPanel
-		ImageIcon icon = new ImageIcon("C:\\Users\\Rahulraj\\eclipse-workspace\\MacroMachine\\src\\main\\pcreate.png");
+		ImageIcon icon = new ImageIcon(Main.pcreate);
 		JLabel createmacro = new JLabel("Create Your Macro");
 		JButton general = new JButton("General");
 		JButton code = new JButton("Code");
@@ -69,13 +94,16 @@ public class CreateMenu extends JPanel{
 		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
 		JLabel recordhotkey = new JLabel("Record Hotkey");
 		JButton recordkey = new JButton("Record Key");
-		JTextField recorded = new JTextField();
+		recorded = new JTextField();
 		JButton settona = new JButton("Set to N/A");
 		JLabel recordmacro = new JLabel("Record Macro");
 		JButton record = new JButton("Record");
 		
 		namefield.setPreferredSize(new Dimension(400, 23));
 		infofield.setPreferredSize(new Dimension(400, 23));
+
+		//make namefield and infofield so that it can be focused and unfocused
+
 		generalcard.setBackground(Color.WHITE);
 		generalcard.setLayout(new GridBagLayout());
 		GridBagConstraints g = new GridBagConstraints();
@@ -116,6 +144,16 @@ public class CreateMenu extends JPanel{
 		recordkey.setBackground(Color.WHITE);
 		recordkey.setFocusable(false);
 		generalcard.add(recordkey, g);
+
+		recordkey.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				recording = true;
+				recorded.setText("");
+				display.delete(0, display.length());
+				display.append("empty");
+			}
+		});
 		
 		g.gridx = 1;
 		g.gridy = 4;
@@ -123,6 +161,10 @@ public class CreateMenu extends JPanel{
 		g.fill = GridBagConstraints.HORIZONTAL;
 		recorded.setPreferredSize(new Dimension(200, 25));
 		recorded.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+		recorded.setFocusable(false);
+		recorded.setHorizontalAlignment(JTextField.CENTER);
+		recorded.setFont(new FontUIResource(Font.DIALOG, Font.PLAIN, 18));
+		recorded.setForeground(Color.BLACK);
 		generalcard.add(recorded, g);
 		
 		g.gridx = 2;
@@ -184,6 +226,11 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.showGeneral();
+				namefield.setText("");
+				infofield.setText("");
+				recorded.setText("");
+				display.delete(0, display.length());
+				display.append("empty");
 				Main.revert();
 			}
 		});
