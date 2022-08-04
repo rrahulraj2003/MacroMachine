@@ -24,23 +24,28 @@ public class CreateMenu extends JPanel{
 
 	public boolean recording = false;
 	private JTextField recorded;
-	private StringBuilder display = new StringBuilder("empty");
+	private StringBuilder display = new StringBuilder("");
 
 	public void displayRecording(KeyEvent e){
 		System.out.println(e.getKeyCode());
 
-		if(display.substring(0).equals("empty")){
+		if(e.getKeyCode() == 17){
 			display.delete(0, 5);
 			display.append("Ctrl");
 			recorded.setText(display.toString());
-		}else if(display.substring(0).equals("Ctrl") && e.getKeyCode() == 16){
-			display.append(" + Shift");
+		}else if(e.getKeyCode() == 16){
+			if(display.toString().contains("Ctrl")) display.append(" + ");
+			display.append("Shift");
 			recorded.setText(display.toString());
-		}else if(display.substring(7).equals("Shift")){
-			display.append(" + " + e.getKeyChar());
+		}else{
+			display.append(" + " + e.getExtendedKeyCode());
 			recorded.setText(display.toString());
 			recording = false;
 		}
+		
+		
+		
+		
 		
 		
 	}
@@ -151,7 +156,6 @@ public class CreateMenu extends JPanel{
 				recording = true;
 				recorded.setText("");
 				display.delete(0, display.length());
-				display.append("empty");
 			}
 		});
 		

@@ -12,7 +12,6 @@ package main;
 
 import java.awt.*;
 
-import javax.print.DocFlavor.URL;
 //import javax.imageio.ImageIO;
 //import javax.imageio.*;
 import javax.swing.*;
