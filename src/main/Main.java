@@ -354,9 +354,12 @@ public class Main{
         
         panel.add(cpanel, BorderLayout.CENTER);
         cpanel.setLayout(cardlayout);
+        mainmenu.setBackground(Color.WHITE);
+        mainmenu.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
         cpanel.add(mainmenu, "m");
         cpanel.add(createmenu, "c");
         cpanel.add(settingsmenu, "s");
+        frame.setVisible(true);
         
         //Menu card, homepage if you will
         ArrayList<String> macross = new ArrayList<String>();
