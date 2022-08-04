@@ -17,10 +17,13 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.File;
 //import java.awt.image.BufferedImage;
 //import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 
@@ -355,8 +358,9 @@ public class Main{
         cpanel.add(settingsmenu, "s");
         
         //Menu card, homepage if you will
-        String[] macros = {"a"};
-        JList<String> list = new JList<String>(macros);
+        ArrayList<String> macross = new ArrayList<String>();
+        String[] macros;
+        JList<String> list = new JList<String>();
         JScrollPane scp = new JScrollPane(list);
         mainmenu.add(scp);
         mainmenu.setLayout(new GridLayout(1, 1));
@@ -364,14 +368,43 @@ public class Main{
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setFocusable(false);
         scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-        
-        //Create menu
-        
-        
+
         //Settings menu
         settingsmenu.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
         settingsmenu.setBackground(Color.WHITE);
+
+        //Frame is packing
+        frame.pack();
+
+        //File Choosing Process
+        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.showOpenDialog(frame);
+
+        //Homepage filling
+        File folder = fc.getSelectedFile();
+        File directory = new File(folder.getPath() + "\\macro-directory.txt");
+
+        Scanner s = new Scanner(directory);
+        if(!directory.exists()){
+            directory.createNewFile();
+        }else{
+            while(s.hasNextLine()){
+                macross.add(s.nextLine());
+            }
+            macros = new String[macross.size()];
+            for(int i = 0; i < macross.size(); i++){
+                macros[i] = macross.get(i);
+            }
+            System.out.println(macros[0]);
+            list = new JList<String>();
+            scp = new JScrollPane(list);
+            mainmenu.add(scp);
+        }
         
+
+
         bcreate.addActionListener(new ActionListener() {
 
 			@Override
@@ -418,13 +451,6 @@ public class Main{
 			}
         	
         });
-        
-        
-        
-        
-        
-        //End of Swing code
-        frame.pack();
 
         //Keystroke Execution, uhhh might be useless but reuse mouse click methods and such
         frame.addKeyListener(new KeyListener(){
@@ -433,9 +459,9 @@ public class Main{
             @Override
             public void keyPressed(KeyEvent e) { //"m" = 77, "a" = 65
                 //keyPress(e);
-                if(createmenu.recording){
-                    createmenu.displayRecording(e);
-                }
+                //if(createmenu.recording){
+                //    createmenu.displayRecording(e);
+                //}
             }
 
             @Override
@@ -452,6 +478,8 @@ public class Main{
                 //any method that is executed when the window is closed
             }
         });
+
+        
 
     }
 

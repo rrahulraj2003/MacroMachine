@@ -43,10 +43,7 @@ public class CreateMenu extends JPanel{
 			recording = false;
 		}
 		
-		
-		
-		
-		
+		//IN PROGRESS
 		
 	}
 
@@ -99,7 +96,7 @@ public class CreateMenu extends JPanel{
 		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
 		JLabel recordhotkey = new JLabel("Record Hotkey");
 		JButton recordkey = new JButton("Record Key");
-		recorded = new JTextField();
+		recorded = new JTextField("(in progress)");
 		JButton settona = new JButton("Set to N/A");
 		JLabel recordmacro = new JLabel("Record Macro");
 		JButton record = new JButton("Record");
@@ -215,27 +212,59 @@ public class CreateMenu extends JPanel{
 		JButton close = new JButton("Close");
 		save.setBackground(Color.WHITE);
 		save.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		save.setFocusable(false);
 		save.setPreferredSize(new Dimension(50, 25));
 		close.setBackground(Color.WHITE);
 		close.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		close.setPreferredSize(new Dimension(55, 25));
+		close.setFocusable(false);
 		add(saveclose, BorderLayout.SOUTH);
 		saveclose.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		saveclose.setLayout(new FlowLayout());
 		saveclose.setBackground(Color.WHITE);
 		saveclose.add(save);
 		saveclose.add(close);
+
+		save.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+
+		});
 		
 		close.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.showGeneral();
-				namefield.setText("");
-				infofield.setText("");
-				recorded.setText("");
-				display.delete(0, display.length());
-				display.append("empty");
-				Main.revert();
+
+				if(namefield.getText().equals("") || infofield.getText().equals("")){
+					String[] options = {"Save", "Don't Save", "Cancel"};
+					int i = JOptionPane.showOptionDialog(Main.frame, "Do you want to discard your macro?", "Unsaved Changes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+					if(i == 0){
+
+					}else if(i == 1){
+						Main.showGeneral();
+						namefield.setText("");
+						infofield.setText("");
+						recorded.setText("");
+						display.delete(0, display.length());
+						display.append("empty");
+						Main.revert();
+					}
+				}else{
+					Main.showGeneral();
+					namefield.setText("");
+					infofield.setText("");
+					recorded.setText("");
+					display.delete(0, display.length());
+					display.append("empty");
+					Main.revert();
+				}
+
+				
 			}
 		});
 		
