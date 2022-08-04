@@ -61,6 +61,7 @@ public class Main{
     private static JButton bcreate;
     private static JButton bsettings;
 
+    public static File folder;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     private static java.net.URL settings = Main.class.getResource("/main/settings.png");
@@ -362,12 +363,6 @@ public class Main{
         String[] macros;
         JList<String> list = new JList<String>();
         JScrollPane scp = new JScrollPane(list);
-        mainmenu.add(scp);
-        mainmenu.setLayout(new GridLayout(1, 1));
-        list.setLayoutOrientation(JList.VERTICAL);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setFocusable(false);
-        scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
 
         //Settings menu
         settingsmenu.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
@@ -383,8 +378,10 @@ public class Main{
         fc.showOpenDialog(frame);
 
         //Homepage filling
-        File folder = fc.getSelectedFile();
+        folder = fc.getSelectedFile();
         File directory = new File(folder.getPath() + "\\macro-directory.txt");
+
+        File a = new File(folder.getPath() + "\\a");
 
         Scanner s = new Scanner(directory);
         if(!directory.exists()){
@@ -397,10 +394,15 @@ public class Main{
             for(int i = 0; i < macross.size(); i++){
                 macros[i] = macross.get(i);
             }
-            System.out.println(macros[0]);
-            list = new JList<String>();
+            list = new JList<String>(macros);
             scp = new JScrollPane(list);
             mainmenu.add(scp);
+            mainmenu.setLayout(new GridLayout(1, 1));
+            list.setLayoutOrientation(JList.VERTICAL);
+            list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            list.setFocusable(false);
+            scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+            frame.setVisible(true);
         }
         
 

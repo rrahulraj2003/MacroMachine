@@ -11,6 +11,7 @@ package main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -45,6 +46,15 @@ public class CreateMenu extends JPanel{
 		
 		//IN PROGRESS
 		
+	}
+
+	public boolean validName(String str){
+
+		if(str.contains("\\") || str.contains("/") || str.contains(":") || str.contains("*") || str.contains("?") || str.contains("\"") || str.contains("<") || str.contains(">") || str.contains("|")){
+			return false;
+		}
+		return true;
+	
 	}
 
 	public CreateMenu(){
@@ -230,7 +240,14 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
+					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Incomplete Macro", JOptionPane.ERROR_MESSAGE);
+				}else{
+					//figure out if the name of the current macro's name is the same as another macro.
+					//prompt user to change name
+					//if not, create a new macro folder with its own nameinfo txt and code txt
+					//terminate createmenu smooth sailing
+				}
 				
 			}
 
@@ -240,12 +257,10 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if(namefield.getText().equals("") || infofield.getText().equals("")){
-					String[] options = {"Save", "Don't Save", "Cancel"};
-					int i = JOptionPane.showOptionDialog(Main.frame, "Do you want to discard your macro?", "Unsaved Changes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				if(!namefield.getText().equals("")){
+					String[] options = {"Yes", "No"};
+					int i = JOptionPane.showOptionDialog(Main.frame, "Are you sure you want\n to discard your macro?", "Incomplete Macro", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 					if(i == 0){
-
-					}else if(i == 1){
 						Main.showGeneral();
 						namefield.setText("");
 						infofield.setText("");
