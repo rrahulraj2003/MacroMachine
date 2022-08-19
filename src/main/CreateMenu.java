@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.awt.event.*;
 
@@ -258,12 +259,21 @@ public class CreateMenu extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				
 				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
-					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Incomplete Macro", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
 				}else if(originalName(namefield.getText(), Main.directory)){
 					
-					//start here
+					File macro = new File(Main.folder.getPath() + "\\" + namefield.getText() + ".txt");
+					try {
+						macro.createNewFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					//Do we need a "Save successful." popup? 
 
 				}else{
+
+					JOptionPane.showMessageDialog(Main.frame, "Name already exists.", "Copycat Macro", JOptionPane.ERROR_MESSAGE);
 					
 				}
 
