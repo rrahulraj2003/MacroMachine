@@ -62,6 +62,7 @@ public class Main{
     private static JButton bsettings;
 
     public static File folder;
+    public static File directory;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     private static java.net.URL settings = Main.class.getResource("/main/settings.png");
@@ -375,26 +376,27 @@ public class Main{
         frame.pack();
 
         //File Choosing Process
-        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(frame);
+        folder = fc.getSelectedFile();
 
         //Homepage filling
         if(folder == null){
             frame.dispose();
         }else{
-            folder = fc.getSelectedFile();
-            File directory = new File(folder.getPath() + "\\macro-directory.txt");
+            directory = new File(folder.getPath() + "\\macro-directory.txt");
 
-            Scanner s = new Scanner(directory);
             if(!directory.exists()){
                 directory.createNewFile();
             }else{
+                Scanner s = new Scanner(directory);
                 while(s.hasNextLine()){
                     macross.add(s.nextLine());
                 }
                 s.close();
+
                 macros = new String[macross.size()];
                 for(int i = 0; i < macross.size(); i++){
                     macros[i] = macross.get(i);

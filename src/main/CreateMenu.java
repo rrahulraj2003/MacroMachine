@@ -12,6 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -33,14 +35,14 @@ public class CreateMenu extends JPanel{
 		if(e.getKeyCode() == 17){
 			display.delete(0, 5);
 			display.append("Ctrl");
-			recorded.setText(display.toString());
+			//recorded.setText(display.toString());
 		}else if(e.getKeyCode() == 16){
 			if(display.toString().contains("Ctrl")) display.append(" + ");
 			display.append("Shift");
-			recorded.setText(display.toString());
+			//recorded.setText(display.toString());
 		}else{
 			display.append(" + " + e.getExtendedKeyCode());
-			recorded.setText(display.toString());
+			//recorded.setText(display.toString());
 			recording = false;
 		}
 		
@@ -55,6 +57,21 @@ public class CreateMenu extends JPanel{
 		}
 		return true;
 	
+	}
+
+	public boolean originalName(String str, File file){
+		try (Scanner s = new Scanner(file)) {
+
+			while(s.hasNextLine()){
+				if(str.equals(s.nextLine())){
+					return false;
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	public CreateMenu(){
@@ -161,7 +178,7 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				recording = true;
-				recorded.setText("");
+				//recorded.setText("");
 				display.delete(0, display.length());
 			}
 		});
@@ -242,12 +259,18 @@ public class CreateMenu extends JPanel{
 				
 				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
 					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Incomplete Macro", JOptionPane.ERROR_MESSAGE);
+				}else if(originalName(namefield.getText(), Main.directory)){
+					
+					//start here
+
 				}else{
-					//figure out if the name of the current macro's name is the same as another macro.
-					//prompt user to change name
-					//if not, create a new macro folder with its own nameinfo txt and code txt
-					//terminate createmenu smooth sailing
+					
 				}
+
+				//figure out if the name of the current macro's name is the same as another macro.
+				//prompt user to change name
+				//if not, create a new macro folder with its own nameinfo txt and code txt
+				//terminate createmenu smooth sailing
 				
 			}
 
@@ -264,7 +287,7 @@ public class CreateMenu extends JPanel{
 						Main.showGeneral();
 						namefield.setText("");
 						infofield.setText("");
-						recorded.setText("");
+						//recorded.setText("");
 						display.delete(0, display.length());
 						display.append("empty");
 						Main.revert();
@@ -273,7 +296,7 @@ public class CreateMenu extends JPanel{
 					Main.showGeneral();
 					namefield.setText("");
 					infofield.setText("");
-					recorded.setText("");
+					//recorded.setText("");
 					display.delete(0, display.length());
 					display.append("empty");
 					Main.revert();
