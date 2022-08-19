@@ -11,9 +11,12 @@ package main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.event.*;
 
@@ -268,8 +271,30 @@ public class CreateMenu extends JPanel{
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+
+					try (FileWriter writer = new FileWriter(macro.getPath())) {
+						BufferedWriter buffer = new BufferedWriter(writer);
+						buffer.write(namefield.getText());
+						buffer.newLine();
+						buffer.write(infofield.getText());
+						buffer.newLine();
+						buffer.write(codearea.getText());
+
+						buffer.close();
+
+						JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.PLAIN_MESSAGE);
+						
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 					
-					//Do we need a "Save successful." popup? 
+					Main.showGeneral();
+					namefield.setText("");
+					infofield.setText("");
+					//recorded.setText("");
+					display.delete(0, display.length());
+					display.append("empty");
+					Main.revert();
 
 				}else{
 
@@ -281,6 +306,8 @@ public class CreateMenu extends JPanel{
 				//prompt user to change name
 				//if not, create a new macro folder with its own nameinfo txt and code txt
 				//terminate createmenu smooth sailing
+
+				
 				
 			}
 

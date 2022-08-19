@@ -17,11 +17,13 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 //import java.awt.image.BufferedImage;
 //import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -63,6 +65,11 @@ public class Main{
 
     public static File folder;
     public static File directory;
+    private static ArrayList<String> macross;
+    private static String[] macros;
+    private static JList<String> list;
+    private static JScrollPane scp;
+    private static JPanel mainmenu;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     private static java.net.URL settings = Main.class.getResource("/main/settings.png");
@@ -236,6 +243,35 @@ public class Main{
     	flip = 0;
     }
 
+    public static void addToDirectory(String name){
+
+        //Add new macro name to directory
+        try (FileWriter writer = new FileWriter(directory)) {
+            BufferedWriter buffer = new BufferedWriter(writer);
+            
+            for(String s: macross){
+                buffer.write(s);
+                buffer.newLine();
+            }
+            buffer.write(name);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Change menu card in home layout
+        macross.add(name);
+        macros = new String[macross.size()];
+                for(int i = 0; i < macross.size(); i++){
+                    macros[i] = macross.get(i);
+                }
+                list = new JList<String>(macros);
+                scp = new JScrollPane(list);
+                mainmenu.add(scp);
+
+
+    }
+
     public Main() throws IOException, AWTException{
 
         //Frame
@@ -349,7 +385,7 @@ public class Main{
         addLButton(rpanel, bdelete, ldelete);
         
         //CPanel, the motherload, container of the "cards"
-        JPanel mainmenu = new JPanel();
+        mainmenu = new JPanel();
         CreateMenu createmenu = new CreateMenu();
         JPanel settingsmenu = new JPanel();
         
@@ -363,10 +399,9 @@ public class Main{
         frame.setVisible(true);
         
         //Menu card, homepage if you will
-        ArrayList<String> macross = new ArrayList<String>();
-        String[] macros;
-        JList<String> list = new JList<String>();
-        JScrollPane scp = new JScrollPane(list);
+        macross = new ArrayList<String>();
+        list = new JList<String>();
+        scp = new JScrollPane(list);
 
         //Settings menu
         settingsmenu.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
@@ -376,7 +411,7 @@ public class Main{
         frame.pack();
 
         //File Choosing Process
-        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.PLAIN_MESSAGE);
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(frame);
