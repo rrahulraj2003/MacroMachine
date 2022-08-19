@@ -381,32 +381,36 @@ public class Main{
         fc.showOpenDialog(frame);
 
         //Homepage filling
-        folder = fc.getSelectedFile();
-        File directory = new File(folder.getPath() + "\\macro-directory.txt");
-
-        File a = new File(folder.getPath() + "\\a");
-
-        Scanner s = new Scanner(directory);
-        if(!directory.exists()){
-            directory.createNewFile();
+        if(folder == null){
+            frame.dispose();
         }else{
-            while(s.hasNextLine()){
-                macross.add(s.nextLine());
+            folder = fc.getSelectedFile();
+            File directory = new File(folder.getPath() + "\\macro-directory.txt");
+
+            Scanner s = new Scanner(directory);
+            if(!directory.exists()){
+                directory.createNewFile();
+            }else{
+                while(s.hasNextLine()){
+                    macross.add(s.nextLine());
+                }
+                s.close();
+                macros = new String[macross.size()];
+                for(int i = 0; i < macross.size(); i++){
+                    macros[i] = macross.get(i);
+                }
+                list = new JList<String>(macros);
+                scp = new JScrollPane(list);
+                mainmenu.add(scp);
+                mainmenu.setLayout(new GridLayout(1, 1));
+                list.setLayoutOrientation(JList.VERTICAL);
+                list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                list.setFocusable(false);
+                scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+                frame.setVisible(true);
             }
-            macros = new String[macross.size()];
-            for(int i = 0; i < macross.size(); i++){
-                macros[i] = macross.get(i);
-            }
-            list = new JList<String>(macros);
-            scp = new JScrollPane(list);
-            mainmenu.add(scp);
-            mainmenu.setLayout(new GridLayout(1, 1));
-            list.setLayoutOrientation(JList.VERTICAL);
-            list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-            list.setFocusable(false);
-            scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-            frame.setVisible(true);
         }
+        
         
 
 
