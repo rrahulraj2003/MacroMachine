@@ -19,7 +19,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 //import java.awt.image.BufferedImage;
 //import java.io.File;
@@ -246,29 +245,48 @@ public class Main{
     public static void addToDirectory(String name){
 
         //Add new macro name to directory
-        try (FileWriter writer = new FileWriter(directory)) {
-            BufferedWriter buffer = new BufferedWriter(writer);
-            
-            for(String s: macross){
-                buffer.write(s);
-                buffer.newLine();
-            }
-            buffer.write(name);
+        
+        directory.getName();
 
+        File newDir = new File(folder.getPath() + "\\newdirectory.txt");
+        try {
+            newDir.createNewFile();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try (FileWriter writer = new FileWriter(newDir)) {
+            for(String s: macross){
+                writer.write(s + "\n");
+            }
+            writer.write(name);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //Someday, in the near future, optimize this absolute mess
+
+        directory = new File(newDir.getPath());
+        newDir = new File(folder.getPath() + "\\macro-directory.txt");
+        newDir.renameTo(new File(folder.getPath() + "\\newdir.txt"));
+        directory.renameTo(new File(folder.getPath() + "\\macro-directory.txt"));
+        
+        directory = new File(folder.getPath() + "\\macro-directory.txt");
+        newDir = new File(folder.getPath() + "\\newdir.txt");
+
+        newDir.delete();
+
         //Change menu card in home layout
         macross.add(name);
         macros = new String[macross.size()];
-                for(int i = 0; i < macross.size(); i++){
-                    macros[i] = macross.get(i);
-                }
-                list = new JList<String>(macros);
-                scp = new JScrollPane(list);
-                mainmenu.add(scp);
-
+        for(int i = 0; i < macross.size(); i++){
+            macros[i] = macross.get(i);
+        }
+        list = new JList<String>(macros);
+        mainmenu.remove(scp);
+        scp = new JScrollPane(list);
+        mainmenu.add(scp);
 
     }
 

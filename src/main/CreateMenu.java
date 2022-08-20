@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.event.*;
 
@@ -272,21 +271,20 @@ public class CreateMenu extends JPanel{
 						e1.printStackTrace();
 					}
 
-					try (FileWriter writer = new FileWriter(macro.getPath())) {
-						BufferedWriter buffer = new BufferedWriter(writer);
-						buffer.write(namefield.getText());
-						buffer.newLine();
-						buffer.write(infofield.getText());
-						buffer.newLine();
-						buffer.write(codearea.getText());
+					try (FileWriter writer = new FileWriter(macro.getPath())) {/*  */
+						writer.write(namefield.getText() + "\n");
+						writer.write(infofield.getText() + "\n");
+						writer.write(codearea.getText());
 
-						buffer.close();
+						writer.close();
 
 						JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.PLAIN_MESSAGE);
 						
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+
+					Main.addToDirectory(namefield.getText());
 					
 					Main.showGeneral();
 					namefield.setText("");
