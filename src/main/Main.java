@@ -17,8 +17,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 //import java.awt.image.BufferedImage;
 //import java.io.File;
@@ -69,6 +69,8 @@ public class Main{
     private static JList<String> list;
     private static JScrollPane scp;
     private static JPanel mainmenu;
+    private static JLabel bottom;
+    private static JList<String> refList;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     private static java.net.URL settings = Main.class.getResource("/main/settings.png");
@@ -252,7 +254,6 @@ public class Main{
         try {
             newDir.createNewFile();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -287,6 +288,13 @@ public class Main{
         mainmenu.remove(scp);
         scp = new JScrollPane(list);
         mainmenu.add(scp);
+        mainmenu.setLayout(new GridLayout(1, 1));
+        list.setLayoutOrientation(JList.VERTICAL);
+        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        list.setFocusable(false);
+        scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+        refList = list;
+        frame.setVisible(true);
 
     }
 
@@ -350,7 +358,7 @@ public class Main{
         panel.add(tpanel, BorderLayout.NORTH);
         
         //BPanel
-        JLabel bottom = new JLabel("info about the selected macro or whatever");
+        bottom = new JLabel("info about the selected macro or whatever");
         bottom.setForeground(Color.BLACK);
         bpanel.add(bottom);
         bpanel.setBackground(SKY);
@@ -429,7 +437,7 @@ public class Main{
         frame.pack();
 
         //File Choosing Process
-        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(frame);
@@ -462,12 +470,24 @@ public class Main{
                 list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
                 list.setFocusable(false);
                 scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+                refList = list;
                 frame.setVisible(true);
             }
         }
-        
-        
 
+        //Changing infobar to display info of selected
+        refList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                System.out.println("CLICKED");
+                try (Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"))) {
+                    s.nextLine();
+                    String str = s.nextLine();
+                    bottom.setText(str);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         bcreate.addActionListener(new ActionListener() {
 

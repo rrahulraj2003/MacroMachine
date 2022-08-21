@@ -11,7 +11,6 @@ package main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -66,7 +65,7 @@ public class CreateMenu extends JPanel{
 		try (Scanner s = new Scanner(file)) {
 
 			while(s.hasNextLine()){
-				if(str.equals(s.nextLine())){
+				if(str.toLowerCase().equals(s.nextLine().toLowerCase())){
 					return false;
 				}
 			}
@@ -260,6 +259,7 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				System.out.println(namefield.getText());
 				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
 					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
 				}else if(originalName(namefield.getText(), Main.directory)){
@@ -278,7 +278,7 @@ public class CreateMenu extends JPanel{
 
 						writer.close();
 
-						JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.INFORMATION_MESSAGE);
 						
 					} catch (IOException e1) {
 						e1.printStackTrace();
