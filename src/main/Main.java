@@ -72,7 +72,6 @@ public class Main{
     private static JScrollPane scp;
     private static JPanel mainmenu;
     private static JLabel bottom;
-    private static JList<String> refList;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     private static java.net.URL settings = Main.class.getResource("/main/settings.png");

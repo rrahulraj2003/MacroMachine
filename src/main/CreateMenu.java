@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Timer;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -26,6 +27,7 @@ public class CreateMenu extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	public static Font HEAD = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+	private static JButton record;
 
 	public boolean recording = false;
 	private JTextField recorded;
@@ -76,7 +78,7 @@ public class CreateMenu extends JPanel{
 		return true;
 	}
 
-	public CreateMenu(){
+	public CreateMenu() {
 		
 		//Panels
 		setLayout(new BorderLayout());
@@ -128,7 +130,7 @@ public class CreateMenu extends JPanel{
 		recorded = new JTextField("(in progress)");
 		JButton settona = new JButton("Set to N/A");
 		JLabel recordmacro = new JLabel("Record Macro");
-		JButton record = new JButton("Record");
+		record = new JButton("Record");
 		
 		namefield.setPreferredSize(new Dimension(400, 23));
 		infofield.setPreferredSize(new Dimension(400, 23));
@@ -179,9 +181,7 @@ public class CreateMenu extends JPanel{
 		recordkey.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				recording = true;
-				//recorded.setText("");
-				display.delete(0, display.length());
+				
 			}
 		});
 		
@@ -254,6 +254,21 @@ public class CreateMenu extends JPanel{
 		saveclose.add(save);
 		saveclose.add(close);
 
+		ActionListener recording = new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				//https://www.youtube.com/watch?v=QEF62Fm81h4
+				//figure out timer and timertasks for record button and the whole macro part
+				//near the finish line babyyyy
+				
+			}
+			
+		};
+
+		record.addActionListener(recording);
+
 		save.addActionListener(new ActionListener(){
 
 			@Override
@@ -321,6 +336,7 @@ public class CreateMenu extends JPanel{
 						Main.showGeneral();
 						namefield.setText("");
 						infofield.setText("");
+						record.setText("Record");
 						//recorded.setText("");
 						display.delete(0, display.length());
 						display.append("empty");
@@ -330,6 +346,7 @@ public class CreateMenu extends JPanel{
 					Main.showGeneral();
 					namefield.setText("");
 					infofield.setText("");
+					record.setText("Record");
 					//recorded.setText("");
 					display.delete(0, display.length());
 					display.append("empty");
