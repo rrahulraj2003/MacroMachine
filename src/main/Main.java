@@ -36,6 +36,8 @@ public class Main{
     //private static Color PRIME = new Color(85, 221, 255);
     public static Color SKY = new Color(120, 240, 255);
     public static Color DARKER = new Color(0, 140, 160);
+    public static Color SELECTION = new Color(210, 250, 255);
+    public static Color SELECTION2 = new Color(195,250, 255);
     //private static Font TEXT = new Font(Font.SERIF, Font.BOLD, 15); //figure out font for button text
 
     //JFrame and JPanel and stuff
@@ -284,7 +286,7 @@ public class Main{
         for(int i = 0; i < macross.size(); i++){
             macros[i] = macross.get(i);
         }
-        list = new JList<String>(macros);
+        list.setListData(macros);
         mainmenu.remove(scp);
         scp = new JScrollPane(list);
         mainmenu.add(scp);
@@ -292,8 +294,8 @@ public class Main{
         list.setLayoutOrientation(JList.VERTICAL);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setFocusable(false);
+        list.setSelectionBackground(SELECTION2);
         scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-        refList = list;
         frame.setVisible(true);
 
     }
@@ -468,17 +470,16 @@ public class Main{
                 mainmenu.setLayout(new GridLayout(1, 1));
                 list.setLayoutOrientation(JList.VERTICAL);
                 list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                list.setSelectionBackground(SELECTION2);
                 list.setFocusable(false);
                 scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-                refList = list;
                 frame.setVisible(true);
             }
         }
 
         //Changing infobar to display info of selected
-        refList.addMouseListener(new MouseAdapter() {
+        list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                System.out.println("CLICKED");
                 try (Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"))) {
                     s.nextLine();
                     String str = s.nextLine();

@@ -259,7 +259,6 @@ public class CreateMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				System.out.println(namefield.getText());
 				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
 					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
 				}else if(originalName(namefield.getText(), Main.directory)){
