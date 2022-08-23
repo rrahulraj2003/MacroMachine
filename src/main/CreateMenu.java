@@ -294,11 +294,16 @@ public class CreateMenu extends JPanel{
 						Main.frame.setAlwaysOnTop(false);
 						Main.frame.toBack();
 
-						long startTime = System.nanoTime();
+						//USE JNA native listener github thing
 
-						//START HERE YESS OMG FINALLY YAY WOW ok
+
+						//long startTime = System.nanoTime();
+
+						
 					}
 				};
+
+				JOptionPane.showMessageDialog(Main.frame, "To stop the macro recording,\n" + "just remember to press Alt-X.", "Ending the Macro Recording", JOptionPane.INFORMATION_MESSAGE);
 
 				timer.schedule(task1, 0);
 

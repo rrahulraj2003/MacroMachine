@@ -420,6 +420,7 @@ public class Main{
         	//Action Creation
             @Override
             public void keyPressed(KeyEvent e) { //"m" = 77, "a" = 65
+                System.out.println(e.getKeyCode());
                 //keyPress(e);
                 //if(createmenu.recording){
                 //    createmenu.displayRecording(e);
