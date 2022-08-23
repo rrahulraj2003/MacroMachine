@@ -16,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.TimerTask;
+import java.util.Timer;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -253,18 +255,64 @@ public class CreateMenu extends JPanel{
 		saveclose.add(save);
 		saveclose.add(close);
 
-		
+		Timer timer = new Timer();
 
-		record.addActionListener(new ActionListener(){
+		ActionListener recording = new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				TimerTask task1 = new TimerTask() {
+					@Override
+					public void run() {
+						record.setText("3");
+						System.out.println("3");
+					}
+				};
+
+				TimerTask task2 = new TimerTask() {
+					@Override
+					public void run() {
+						record.setText("2");
+						System.out.println("2");
+					}
+				};
+
+				TimerTask task3 = new TimerTask() {
+					@Override
+					public void run() {
+						record.setText("1");
+						System.out.println("1");
+
+					}
+				};
+
+				TimerTask task4 = new TimerTask(){
+					@Override
+					public void run() {
+						record.setText("Record");
+						Main.frame.setAlwaysOnTop(false);
+						Main.frame.toBack();
+
+						long startTime = System.nanoTime();
+
+						//START HERE YESS OMG FINALLY YAY WOW ok
+					}
+				};
+
+				timer.schedule(task1, 0);
+
+				timer.schedule(task2, 1000);
+
+				timer.schedule(task3, 2000);
+
+				timer.schedule(task4, 3000);
 				
 			}
 			
-		});
+		};
+
+		record.addActionListener(recording);
 
 		save.addActionListener(new ActionListener(){
 
