@@ -50,9 +50,7 @@ public class Main{
     private static JPanel bpanel = new JPanel();				//bottom panel
     private static CardLayout cardlayout = new CardLayout();	//CardLayout
     private static JMenuBar menubar = new JMenuBar();			//menu bar
-    private static JLabel text;
-    ArrayList<Action> actions = new ArrayList<Action>();
-    ArrayList<JFrame> windows = new ArrayList<JFrame>();
+    ArrayList<Move> actions = new ArrayList<Move>();
     private static int flip = 0;
     
     private static JButton bplay;
@@ -87,126 +85,6 @@ public class Main{
     //private static int x = 0;
     //private static int y = 0;
     //private static int cascade = 0;
-    
-    //Remove JComponent from panel
-    //private static void remove(JComponent p){ panel.remove(p); }
-
-    //1 Click and release method at (x, y)
-    public static void click(int x, int y) throws AWTException{
-        Robot bot = new Robot();
-        bot.mouseMove(x, y);    
-        bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-    }
-    
-    //3 Hover over a mouse position
-    public static void hover(int x, int y) throws AWTException{
-        Robot bot = new Robot();
-        bot.mouseMove(x, y);
-    }
-    
-    //4 Drag
-    public static void drag(int x, int y) throws AWTException{
-        Robot bot = new Robot();
-        bot.mouseMove(x, y);
-        bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        bot.mouseMove(x, y + 500);
-        bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-    }
-    
-    //5 Keystroke
-    public static void keystroke(String k) {
-    	//Robot bot = new Robot();
-    	//bot.keyPress();
-    }
-    
-    public void keyPress(KeyEvent e) {
-    	
-    	//*
-    	
-    	//KeyCode for Keystroke Detection
-    	System.out.println(e.getKeyCode());
-    	
-    	//*
-    	
-    	if(e.getKeyCode() == 8) frame.dispose();
-        
-    	//1 Click
-        if(e.getKeyCode() == (1 + 48)){
-            System.out.println(MouseInfo.getPointerInfo().getLocation());
-            actions.add(new Action(1, MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY()));
-            text.setText(text.getText() + MouseInfo.getPointerInfo().getLocation().getX() + "," + MouseInfo.getPointerInfo().getLocation().getY() + "  \n");
-        }
-        
-        //2 Wait (for now, its wait for 1 second)
-        if(e.getKeyCode() == (2 + 48)) {
-        	actions.add(new Action(2, 1000));
-        }
-        
-        //3 Hover
-        if(e.getKeyCode() == (3 + 48)){
-            System.out.println(MouseInfo.getPointerInfo().getLocation());
-            actions.add(new Action(3, MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY()));
-            text.setText(text.getText() + MouseInfo.getPointerInfo().getLocation().getX() + "," + MouseInfo.getPointerInfo().getLocation().getY() + "  \n");
-        }
-        
-        //4 Drag
-        if(e.getKeyCode() == (4 + 48)){
-            System.out.println(MouseInfo.getPointerInfo().getLocation());
-            actions.add(new Action(4, MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY()));
-            text.setText(text.getText() + MouseInfo.getPointerInfo().getLocation().getX() + "," + MouseInfo.getPointerInfo().getLocation().getY() + "  \n");
-        }
-        
-        //5 Keystroke
-        if(e.getKeyCode() == (5 + 48)){
-            System.out.println(MouseInfo.getPointerInfo().getLocation());
-            actions.add(new Action(4, 65));
-            text.setText(text.getText() + MouseInfo.getPointerInfo().getLocation().getX() + "," + MouseInfo.getPointerInfo().getLocation().getY() + "  \n");
-        }
-        
-        //R -> Reset Actions
-        if(e.getKeyCode() == 82) actions.clear();
-        
-        //Enter -> Execution of All Actions
-        if(e.getKeyCode() == 10) {
-        	for(Action p: actions) {
-        		
-        		if(p.id == 1) { //1 Click
-        			try {
-						click(p.getX(), p.getY());
-					} catch (AWTException e1) {
-						e1.printStackTrace();
-					}
-        		}else
-        		if(p.id == 2) { //2 Wait
-        			try {
-						Thread.sleep(p.getValue());
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-        		}else
-            	if(p.id == 3) { //3 Hover
-            		try {
-            			hover(p.getX(), p.getY());
-					} catch (AWTException e1) {
-						e1.printStackTrace();
-					}
-            	}else
-            	if(p.id == 4) { //4 Drag
-            		try {
-            			drag(p.getX(), p.getY());
-					} catch (AWTException e1) {
-						e1.printStackTrace();
-					}
-            	}else
-        		if(p.id == 4) { //5 Keystroke
-            		//Simulate pressing a key
-            	}
-
-            }
-        }
-    	
-    }
     
     public void addLButton(JPanel panel, JButton button, JLabel label) {
     	panel.add(button);

@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Timer;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -254,20 +253,18 @@ public class CreateMenu extends JPanel{
 		saveclose.add(save);
 		saveclose.add(close);
 
-		ActionListener recording = new ActionListener(){
+		
+
+		record.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				//https://www.youtube.com/watch?v=QEF62Fm81h4
-				//figure out timer and timertasks for record button and the whole macro part
-				//near the finish line babyyyy
+				
 				
 			}
 			
-		};
-
-		record.addActionListener(recording);
+		});
 
 		save.addActionListener(new ActionListener(){
 

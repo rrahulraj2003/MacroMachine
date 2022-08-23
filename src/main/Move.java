@@ -1,6 +1,6 @@
 package main;
 
-public class Action {
+public class Move {
 	
 	public int id;
 	
@@ -10,7 +10,7 @@ public class Action {
 	private int value;
 	
 	//1 Click, 3 Hover, kinda 4 Drag
-	public Action(int i, double X, double Y) {
+	public Move(int i, double X, double Y) {
 		id = i;
 		x = (int) Math.round(X);
 		y = (int) Math.round(Y);
@@ -24,7 +24,7 @@ public class Action {
 	
 	
 	//2 Wait, 5 Keystroke
-	public Action(int i, int val) {
+	public Move(int i, int val) {
 		id = i;
 		value = val;
 	}
