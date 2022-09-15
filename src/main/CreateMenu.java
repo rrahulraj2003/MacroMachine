@@ -23,7 +23,16 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 
-public class CreateMenu extends JPanel{
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener;
+
+public class CreateMenu extends JPanel implements NativeMouseInputListener, NativeMouseWheelListener, NativeKeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -78,6 +87,31 @@ public class CreateMenu extends JPanel{
 		}
 		return true;
 	}
+
+	public void nativeMousePressed(NativeMouseEvent e) {
+		System.out.println("Mouse Pressed: (" + e.getButton() + ") + e.getX() + " + e.getY());
+	}
+
+	public void nativeMouseDragged(NativeMouseEvent e) {
+		System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+	}
+
+	public void nativeMouseWheelMoved(NativeMouseWheelEvent e) {
+		System.out.println("Mosue Wheel Moved: " + e.getWheelRotation());
+	}
+
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+
+		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+            		try {
+                		GlobalScreen.unregisterNativeHook();
+            		} catch (NativeHookException nativeHookException) {
+                		nativeHookException.printStackTrace();
+            		}
+        	}
+	}
+	
 
 	public CreateMenu() {
 		
@@ -257,6 +291,14 @@ public class CreateMenu extends JPanel{
 
 		Timer timer = new Timer();
 
+
+		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
+		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
+		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
+		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
+		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
+
+
 		ActionListener recording = new ActionListener(){
 
 			@Override
@@ -293,19 +335,31 @@ public class CreateMenu extends JPanel{
 						record.setText("Record");
 						Main.frame.setAlwaysOnTop(false);
 						Main.frame.toBack();
-
-						//USE JNA native listener github thing
-
-						//ADD SCROLL
-
-
 						//long startTime = System.nanoTime();
+
+						//Starts NativeHook
+						try {
+							GlobalScreen.registerNativeHook();
+						}
+						catch (NativeHookException ex) {
+							System.err.println("There was a problem registering the native hook.");
+							System.err.println(ex.getMessage());
+				
+							System.exit(1);
+						}
+				
+						//Mouse Listeners
+						CreateMenu example = new CreateMenu();GlobalScreen.addNativeMouseListener(example);
+						GlobalScreen.addNativeMouseMotionListener(example);
+
+						GlobalScreen.addNativeMouseWheelListener(new CreateMenu());
+						GlobalScreen.addNativeKeyListener(new CreateMenu());
 
 						
 					}
 				};
 
-				JOptionPane.showMessageDialog(Main.frame, "To stop the macro recording,\n" + "just remember to press Alt-X.", "Ending the Macro Recording", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(Main.frame, "To stop the macro recording,\n" + "you need to press Esc.", "Ending the Macro Recording", JOptionPane.INFORMATION_MESSAGE);
 
 				timer.schedule(task1, 0);
 
