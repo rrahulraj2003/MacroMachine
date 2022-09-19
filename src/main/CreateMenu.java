@@ -333,8 +333,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				writer.write(namefield.getText() + "\n");
 				writer.write(infofield.getText() + "\n");
 				writer.write(codearea.getText());
-
-				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -347,6 +345,12 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 			if(diff) return false;
 			
+			try {
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			Main.showGeneral();
 			namefield.setText("");
 			infofield.setText("");
@@ -640,6 +644,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 						display.delete(0, display.length());
 						display.append("empty");
 						Main.revert();
+						
 					}
 				}else{
 					Main.showGeneral();
