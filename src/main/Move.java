@@ -1,5 +1,11 @@
 package main;
 
+//That moment when you write some code and then
+//forget why you wrote it in the first place :|
+//For example, idk why I wrote this Java class.
+
+//Leave this class in here for now...
+
 public class Move {
 	
 	public int id;

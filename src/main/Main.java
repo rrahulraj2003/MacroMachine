@@ -50,7 +50,6 @@ public class Main{
     private static JPanel bpanel = new JPanel();				//bottom panel
     private static CardLayout cardlayout = new CardLayout();	//CardLayout
     private static JMenuBar menubar = new JMenuBar();			//menu bar
-    ArrayList<Move> actions = new ArrayList<Move>();
     private static int flip = 0;
     
     private static JButton bplay;

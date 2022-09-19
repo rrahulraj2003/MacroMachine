@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.Timer;
@@ -38,12 +39,105 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	
 	public static Font HEAD = new Font(Font.SANS_SERIF, Font.BOLD, 14);
 	private static JButton record;
+	private static File macro;
+	private static JTextField namefield;
+	private static JTextField infofield;
+	private static JTextArea codearea;
+	private static FileWriter writer;
 
-	public boolean recording = false;
 	private JTextField recorded;
-	private StringBuilder display = new StringBuilder("");
+	private static StringBuilder display = new StringBuilder("");
 
-	public void displayRecording(KeyEvent e){
+	public static int isKey(String key){
+
+		switch (key) {
+			case "A": return KeyEvent.VK_A;
+			case "B": return KeyEvent.VK_B;
+			case "C": return KeyEvent.VK_C;
+			case "D": return KeyEvent.VK_D;
+			case "E": return KeyEvent.VK_E;
+			case "F": return KeyEvent.VK_F;
+			case "G": return KeyEvent.VK_G;
+			case "H": return KeyEvent.VK_H;
+			case "I": return KeyEvent.VK_I;
+			case "J": return KeyEvent.VK_J;
+			case "K": return KeyEvent.VK_K;
+			case "L": return KeyEvent.VK_L;
+			case "M": return KeyEvent.VK_M;
+			case "N": return KeyEvent.VK_N;
+			case "O": return KeyEvent.VK_O;
+			case "P": return KeyEvent.VK_P;
+			case "Q": return KeyEvent.VK_Q;
+			case "R": return KeyEvent.VK_R;
+			case "S": return KeyEvent.VK_S;
+			case "T": return KeyEvent.VK_T;
+			case "U": return KeyEvent.VK_U;
+			case "V": return KeyEvent.VK_V;
+			case "W": return KeyEvent.VK_W;
+			case "X": return KeyEvent.VK_X;
+			case "Y": return KeyEvent.VK_Y;
+			case "Z": return KeyEvent.VK_Z;
+			case "Back Quote": return KeyEvent.VK_BACK_QUOTE;
+			case "0": return KeyEvent.VK_0;
+			case "1": return KeyEvent.VK_1;
+			case "2": return KeyEvent.VK_2;
+			case "3": return KeyEvent.VK_3;
+			case "4": return KeyEvent.VK_4;
+			case "5": return KeyEvent.VK_5;
+			case "6": return KeyEvent.VK_6;
+			case "7": return KeyEvent.VK_7;
+			case "8": return KeyEvent.VK_8;
+			case "9": return KeyEvent.VK_9;
+			case "Minus": return KeyEvent.VK_MINUS;
+			case "Equals": return KeyEvent.VK_EQUALS;
+			case "Open Bracket": return KeyEvent.VK_OPEN_BRACKET;
+			case "Close Bracket": return KeyEvent.VK_CLOSE_BRACKET;
+			case "Back Slash": return KeyEvent.VK_BACK_SLASH;
+			case "Semicolon": return KeyEvent.VK_SEMICOLON;
+			case "Quote": return KeyEvent.VK_QUOTE;
+			case "Comma": return KeyEvent.VK_COMMA;
+			case "Period": return KeyEvent.VK_PERIOD;
+			case "Slash": return KeyEvent.VK_SLASH;
+			
+			case "Ctrl": return KeyEvent.VK_CONTROL;
+			case "Shift": return KeyEvent.VK_SHIFT;
+			case "Tab": return KeyEvent.VK_TAB;
+			case "Enter": return KeyEvent.VK_ENTER;
+			case "Space": return KeyEvent.VK_SPACE;
+			case "Meta": return KeyEvent.VK_META;
+			case "Caps Lock": return KeyEvent.VK_CAPS_LOCK;
+
+			case "Up": return KeyEvent.VK_UP;
+			case "Down": return KeyEvent.VK_DOWN;
+			case "Left": return KeyEvent.VK_LEFT;
+			case "Right": return KeyEvent.VK_RIGHT;
+			
+			case "F1": return KeyEvent.VK_F1;
+			case "F2": return KeyEvent.VK_F2;
+			case "F3": return KeyEvent.VK_F3;
+			case "F4": return KeyEvent.VK_F4;
+			case "F5": return KeyEvent.VK_F5;
+			case "F6": return KeyEvent.VK_F6;
+			case "F7": return KeyEvent.VK_F7;
+			case "F8": return KeyEvent.VK_F8;
+			case "F9": return KeyEvent.VK_F9;
+			case "F10": return KeyEvent.VK_F10;
+			case "F11": return KeyEvent.VK_F11;
+			case "F12": return KeyEvent.VK_F12;
+
+			case "Delete": return KeyEvent.VK_DELETE;
+			case "Home": return KeyEvent.VK_HOME;
+			case "End": return KeyEvent.VK_END;
+			case "Insert": return KeyEvent.VK_INSERT;
+			case "Page Up": return KeyEvent.VK_PAGE_UP;
+			case "Page Down": return KeyEvent.VK_PAGE_DOWN;
+		}
+
+		return -1;
+			
+	}
+
+	public void displayRecording(KeyEvent e){ //Ignore for now
 		System.out.println(e.getKeyCode());
 
 		if(e.getKeyCode() == 17){
@@ -57,14 +151,13 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		}else{
 			display.append(" + " + e.getExtendedKeyCode());
 			//recorded.setText(display.toString());
-			recording = false;
 		}
 		
 		//IN PROGRESS
 		
 	}
 
-	public boolean validName(String str){
+	public static boolean validName(String str){
 
 		if(str.contains("\\") || str.contains("/") || str.contains(":") || str.contains("*") || str.contains("?") || str.contains("\"") || str.contains("<") || str.contains(">") || str.contains("|")){
 			return false;
@@ -73,7 +166,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	
 	}
 
-	public boolean originalName(String str, File file){
+	public static boolean originalName(String str, File file){
 		try (Scanner s = new Scanner(file)) {
 
 			while(s.hasNextLine()){
@@ -88,28 +181,192 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		return true;
 	}
 
-	public void nativeMousePressed(NativeMouseEvent e) {
-		System.out.println("Mouse Pressed: (" + e.getButton() + ") + e.getX() + " + e.getY());
+	private static boolean runnin = false;
+	private static ArrayList<Action> actions = new ArrayList<Action>();
+	private static long startTime = 0;
+
+	public static void start(){
+		runnin = true;
+		startTime = System.currentTimeMillis();
 	}
 
-	public void nativeMouseDragged(NativeMouseEvent e) {
-		System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+	public void nativeMousePressed(NativeMouseEvent e) { //1 Click
+		//System.out.println("Mouse press: (" + e.getButton() + ") " + e.getX() + " , " + e.getY());
+		if(!runnin) start();
+		actions.add(new Action(e.getX(), e.getY(), e.getButton(), 1, startTime - System.currentTimeMillis()));
+		System.out.println(e.getY());
 	}
 
-	public void nativeMouseWheelMoved(NativeMouseWheelEvent e) {
-		System.out.println("Mosue Wheel Moved: " + e.getWheelRotation());
+	public void nativeMouseDragged(NativeMouseEvent e) { //2 Drag
+		//System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+		if(!runnin) start();
+		
+		if(actions.get(actions.size() - 1).task == 1){
+			actions.add(new Action(e.getX(), e.getY(), e.getButton(), 2, System.currentTimeMillis()));
+		}else{
+			actions.get(actions.size() - 1).set(e.getX(), e.getY());
+		}
+		
 	}
 
-	public void nativeKeyPressed(NativeKeyEvent e) {
-		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+	public void nativeMouseReleased(NativeMouseEvent e){ //3 Release
+		//System.out.println("Mouse Released: " + e.getX() + ", " + e.getY());
+		if(!runnin) start();
+		actions.add(new Action(e.getX(), e.getY(), e.getButton(), 3, startTime - System.currentTimeMillis()));
+	}
 
-		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
-            		try {
-                		GlobalScreen.unregisterNativeHook();
-            		} catch (NativeHookException nativeHookException) {
-                		nativeHookException.printStackTrace();
-            		}
-        	}
+	public void nativeMouseWheelMoved(NativeMouseWheelEvent e) { //4 Scroll
+		//System.out.println("Mouse Wheel Moved: " + e.getWheelRotation());
+		if(!runnin) start();
+		if((actions.size() > 1 && actions.get(actions.size() - 1).task == 4) && ((actions.get(actions.size() - 1).getX() > 0 && e.getWheelRotation() == 1) || (actions.get(actions.size() - 1).getX() < 0 && e.getWheelRotation() == -1))){
+			actions.get(actions.size() - 1).increment();
+		}else{
+			actions.add(new Action(e.getWheelRotation() == 1 ? true : false, startTime - System.currentTimeMillis()));
+		}
+	}
+
+	public void nativeKeyPressed(NativeKeyEvent e) { //5 KeyPress
+		//System.out.println("Key Pressed: " + e.getKeyCode() + ", " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		if(!runnin) start();
+		
+		actions.add(new Action(isKey(NativeKeyEvent.getKeyText(e.getKeyCode())), true, startTime - System.currentTimeMillis()));
+
+		//Stop recording
+		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) { //Doesn't work twice, figure out why
+            try {
+            	GlobalScreen.unregisterNativeHook();
+            } catch (NativeHookException nativeHookException) {
+            	nativeHookException.printStackTrace();
+            }
+			Main.frame.setAlwaysOnTop(true);
+
+			try {
+				
+				for(Action act: actions){
+					if(act.task == 1){
+						writer.write("1 Click\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n");
+					}else if(act.task == 2){
+						writer.write("2 Drag\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n");
+					}else if(act.task == 3){
+						writer.write("3 Scroll\n" + act.getX() + "\n" + act.time() + "\n");
+					}else if(act.task == 4){
+						writer.write("4 KeyPress\n" + act.getX() + "\n" + act.time() + "\n");
+					}else if(act.task == 5){
+						writer.write("5 KeyRelease\n" + act.getX() + "\n" + act.time() + "\n");
+					}
+				}
+
+				writer.close();
+
+				JOptionPane.showMessageDialog(Main.frame, "Recording Successful.", "Recording", JOptionPane.INFORMATION_MESSAGE);
+
+				Main.showGeneral();
+		    	namefield.setText("");
+		    	infofield.setText("");
+		    	//recorded.setText("");
+		    	display.delete(0, display.length());
+		    	display.append("empty");
+		    	Main.revert();
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+				
+        }
+
+	}
+
+	public void nativeKeyReleased(NativeKeyEvent e){ //6 KeyRelease
+		//System.out.println("Key Released: " + e.getKeyCode() + ", " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		if(!runnin) start();
+
+		actions.add(new Action(isKey(NativeKeyEvent.getKeyText(e.getKeyCode())), false, startTime - System.currentTimeMillis()));
+
+	}
+
+	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+
+	private static void record(){
+		record.setText("Record");
+		Main.frame.setAlwaysOnTop(false);
+		Main.frame.toBack();
+
+		//Starts NativeHook
+		try {
+			GlobalScreen.registerNativeHook();
+		}
+		catch (NativeHookException ex) {
+			System.err.println("There was a problem registering the native hook.");
+			System.err.println(ex.getMessage());
+			
+			System.exit(1);
+		}
+				
+		//Mouse Listeners
+		CreateMenu example = new CreateMenu();
+		GlobalScreen.addNativeMouseListener(example);
+		GlobalScreen.addNativeMouseMotionListener(example);
+
+		GlobalScreen.addNativeMouseWheelListener(new CreateMenu());
+		GlobalScreen.addNativeKeyListener(new CreateMenu());
+	}
+
+	public static boolean saveMacro(boolean diff){
+		if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
+			JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
+			if(diff) return true;
+		}else if(originalName(namefield.getText(), Main.directory)){
+			
+			macro = new File(Main.folder.getPath() + "\\" + namefield.getText() + ".txt");
+			try {
+				macro.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				writer = new FileWriter(macro.getPath());
+				writer.write(namefield.getText() + "\n");
+				writer.write(infofield.getText() + "\n");
+				writer.write(codearea.getText());
+
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+				JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				
+			
+
+			Main.addToDirectory(namefield.getText());
+
+			if(diff) return false;
+			
+			Main.showGeneral();
+			namefield.setText("");
+			infofield.setText("");
+			//recorded.setText("");
+			display.delete(0, display.length());
+			display.append("empty");
+			Main.revert();
+
+		}else{
+
+			JOptionPane.showMessageDialog(Main.frame, "Name already exists.", "Copycat Macro", JOptionPane.ERROR_MESSAGE);
+			if(diff) return true;
+		}
+
+		return false;
+
+		//figure out if the name of the current macro's name is the same as another macro.
+		//prompt user to change name
+		//if not, create a new macro folder with its own nameinfo txt and code txt
+		//terminate createmenu smooth sailing
 	}
 	
 
@@ -156,9 +413,9 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		
 		//GeneralCard
 		JLabel nameanddesc = new JLabel("Name and Description");
-		JTextField namefield = new JTextField();
+		namefield = new JTextField();
 		TextPrompt nametext = new TextPrompt("Name", namefield); nametext.getClass(); //to get rid of yellow line
-		JTextField infofield = new JTextField();
+		infofield = new JTextField();
 		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
 		JLabel recordhotkey = new JLabel("Record Hotkey");
 		JButton recordkey = new JButton("Record Key");
@@ -257,7 +514,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		
 		//CodeCard
 		codecard.setLayout(new GridLayout(1, 1));
-		JTextArea codearea = new JTextArea("//Macro Code Here");
+		codearea = new JTextArea("//Macro Code Here");
 		JScrollPane scp = new JScrollPane(codearea);
 		TextPrompt scptext = new TextPrompt("", codearea); scptext.getClass();
 		codearea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -291,18 +548,12 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 		Timer timer = new Timer();
 
-
-		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
-		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
-		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
-		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
-		/*MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/
-
-
 		ActionListener recording = new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				if(saveMacro(true)) return;
 				
 				TimerTask task1 = new TimerTask() {
 					@Override
@@ -332,29 +583,8 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				TimerTask task4 = new TimerTask(){
 					@Override
 					public void run() {
-						record.setText("Record");
-						Main.frame.setAlwaysOnTop(false);
-						Main.frame.toBack();
-						//long startTime = System.nanoTime();
-
-						//Starts NativeHook
-						try {
-							GlobalScreen.registerNativeHook();
-						}
-						catch (NativeHookException ex) {
-							System.err.println("There was a problem registering the native hook.");
-							System.err.println(ex.getMessage());
-				
-							System.exit(1);
-						}
-				
-						//Mouse Listeners
-						CreateMenu example = new CreateMenu();GlobalScreen.addNativeMouseListener(example);
-						GlobalScreen.addNativeMouseMotionListener(example);
-
-						GlobalScreen.addNativeMouseWheelListener(new CreateMenu());
-						GlobalScreen.addNativeKeyListener(new CreateMenu());
-
+						
+						record();
 						
 					}
 				};
@@ -380,52 +610,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
-					JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
-				}else if(originalName(namefield.getText(), Main.directory)){
-					
-					File macro = new File(Main.folder.getPath() + "\\" + namefield.getText() + ".txt");
-					try {
-						macro.createNewFile();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-
-					try (FileWriter writer = new FileWriter(macro.getPath())) {/*  */
-						writer.write(namefield.getText() + "\n");
-						writer.write(infofield.getText() + "\n");
-						writer.write(codearea.getText());
-
-						writer.close();
-
-						JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.INFORMATION_MESSAGE);
-						
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-
-					Main.addToDirectory(namefield.getText());
-					
-					Main.showGeneral();
-					namefield.setText("");
-					infofield.setText("");
-					//recorded.setText("");
-					display.delete(0, display.length());
-					display.append("empty");
-					Main.revert();
-
-				}else{
-
-					JOptionPane.showMessageDialog(Main.frame, "Name already exists.", "Copycat Macro", JOptionPane.ERROR_MESSAGE);
-					
-				}
-
-				//figure out if the name of the current macro's name is the same as another macro.
-				//prompt user to change name
-				//if not, create a new macro folder with its own nameinfo txt and code txt
-				//terminate createmenu smooth sailing
-
-				
+				saveMacro(true);
 				
 			}
 
@@ -434,6 +619,14 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		close.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				if(GlobalScreen.isNativeHookRegistered()){
+					try {
+                		GlobalScreen.unregisterNativeHook();
+            		} catch (NativeHookException nativeHookException) {
+                		nativeHookException.printStackTrace();
+            		}
+				}
 
 				if(!namefield.getText().equals("")){
 					String[] options = {"Yes", "No"};
