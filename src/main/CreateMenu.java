@@ -191,45 +191,48 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	public void nativeMousePressed(NativeMouseEvent e) { //1 Click
-		//System.out.println("Mouse press: (" + e.getButton() + ") " + e.getX() + " , " + e.getY());
+		System.out.println("Mouse press: (" + e.getButton() + ") " + e.getX() + " , " + e.getY());
 		if(!runnin) start();
-		actions.add(new Action(e.getX(), e.getY(), e.getButton(), 1, startTime - System.currentTimeMillis()));
-		System.out.println(e.getY());
+		actions.add(new Action(e.getX(), e.getY(), e.getButton(), 1, System.currentTimeMillis()));
+		System.out.println(actions.get(actions.size() - 1).getX() + " " + actions.get(actions.size() - 1).getY());
 	}
 
 	public void nativeMouseDragged(NativeMouseEvent e) { //2 Drag
-		//System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+		System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
 		if(!runnin) start();
-		
-		if(actions.get(actions.size() - 1).task == 1){
-			actions.add(new Action(e.getX(), e.getY(), e.getButton(), 2, System.currentTimeMillis()));
+
+		if(actions.get(actions.size() - 1).task == 2){
+			//actions.get(actions.size() - 1).set(e.getX(), e.getY());
 		}else{
-			actions.get(actions.size() - 1).set(e.getX(), e.getY());
+			//actions.add(new Action(e.getX(), e.getY(), e.getButton(), 2, startTime - System.currentTimeMillis()));
 		}
 		
 	}
 
 	public void nativeMouseReleased(NativeMouseEvent e){ //3 Release
-		//System.out.println("Mouse Released: " + e.getX() + ", " + e.getY());
+		System.out.println("Mouse Released: " + e.getX() + ", " + e.getY());
 		if(!runnin) start();
 		actions.add(new Action(e.getX(), e.getY(), e.getButton(), 3, startTime - System.currentTimeMillis()));
+		System.out.println(actions.get(actions.size() - 1).getX() + " " + actions.get(actions.size() - 1).getY());
 	}
 
 	public void nativeMouseWheelMoved(NativeMouseWheelEvent e) { //4 Scroll
-		//System.out.println("Mouse Wheel Moved: " + e.getWheelRotation());
+		System.out.println("Mouse Wheel Moved: " + e.getWheelRotation());
+		/*
 		if(!runnin) start();
 		if((actions.size() > 1 && actions.get(actions.size() - 1).task == 4) && ((actions.get(actions.size() - 1).getX() > 0 && e.getWheelRotation() == 1) || (actions.get(actions.size() - 1).getX() < 0 && e.getWheelRotation() == -1))){
 			actions.get(actions.size() - 1).increment();
 		}else{
 			actions.add(new Action(e.getWheelRotation() == 1 ? true : false, startTime - System.currentTimeMillis()));
 		}
+		*/
 	}
 
 	public void nativeKeyPressed(NativeKeyEvent e) { //5 KeyPress
-		//System.out.println("Key Pressed: " + e.getKeyCode() + ", " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		System.out.println("Key Pressed: " + e.getKeyCode() + ", " + NativeKeyEvent.getKeyText(e.getKeyCode()));
 		if(!runnin) start();
 		
-		actions.add(new Action(isKey(NativeKeyEvent.getKeyText(e.getKeyCode())), true, startTime - System.currentTimeMillis()));
+		if(e.getKeyCode() != NativeKeyEvent.VC_ESCAPE) actions.add(new Action(isKey(NativeKeyEvent.getKeyText(e.getKeyCode())), true, startTime - System.currentTimeMillis()));
 
 		//Stop recording
 		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) { //Doesn't work twice, figure out why
@@ -244,15 +247,17 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				
 				for(Action act: actions){
 					if(act.task == 1){
-						writer.write("1 Click\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n");
+						writer.write("1 Click\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n\n");
 					}else if(act.task == 2){
-						writer.write("2 Drag\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n");
+						writer.write("2 Drag\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n\n");
 					}else if(act.task == 3){
-						writer.write("3 Scroll\n" + act.getX() + "\n" + act.time() + "\n");
+						writer.write("3 Release\n" + act.getX() + "\n" + act.getY() + "\n" + act.time() + "\n\n");
 					}else if(act.task == 4){
-						writer.write("4 KeyPress\n" + act.getX() + "\n" + act.time() + "\n");
+						writer.write("4 Scroll\n" + act.getX() + "\n" + act.time() + "\n\n");
 					}else if(act.task == 5){
-						writer.write("5 KeyRelease\n" + act.getX() + "\n" + act.time() + "\n");
+						writer.write("5 KeyPress\n" + act.getX() + "\n" + act.time() + "\n\n");
+					}else if(act.task == 6){
+						writer.write("6 KeyRelease\n" + act.getX() + "\n" + act.time() + "\n\n");
 					}
 				}
 
@@ -332,7 +337,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				writer = new FileWriter(macro.getPath());
 				writer.write(namefield.getText() + "\n");
 				writer.write(infofield.getText() + "\n");
-				writer.write(codearea.getText());
+				writer.write(codearea.getText() + "\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -358,6 +363,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			display.delete(0, display.length());
 			display.append("empty");
 			Main.revert();
+			Main.frame.pack();
 
 		}else{
 

@@ -4,7 +4,6 @@ import java.util.*;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class Action extends TimerTask{
 
