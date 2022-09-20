@@ -49,11 +49,17 @@ public class Main{
     private static JPanel rpanel = new JPanel(); 				//right panel
     private static JPanel bpanel = new JPanel();				//bottom panel
     private static CardLayout cardlayout = new CardLayout();	//CardLayout
+    private static JMenuBar menubar = new JMenuBar();			//menu bar
+    private static int flip = 0;
     
-    private static JButton badd;
     private static JButton bplay;
+    private static JButton bstop;
+    private static JButton bloop;
     private static JButton bedit;
-    private static JButton btrash;
+    private static JButton breorder;
+    private static JButton bdelete;
+    private static JButton bcreate;
+    private static JButton bsettings;
 
     public static File folder;
     public static File directory;
@@ -65,6 +71,9 @@ public class Main{
     private static JLabel bottom;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
+    private static java.net.URL settings = Main.class.getResource("/main/settings.png");
+    private static java.net.URL psettings = Main.class.getResource("/main/psettings.png");
+    private static java.net.URL black = Main.class.getResource("/main/black.png");
     
     //Basic Colors
     //private static final Color BK = new Color(5, 19, 54); //background color
@@ -94,16 +103,23 @@ public class Main{
 		lpanel.setBackground(Color.WHITE);
 		rpanel.setBackground(Color.WHITE);
 		bpanel.setBackground(SKY);
-		badd.setBackground(SKY);
 		bplay.setBackground(SKY);
+		bstop.setBackground(SKY);
+		bloop.setBackground(SKY);
 		bedit.setBackground(SKY);
-		btrash.setBackground(SKY);
+		breorder.setBackground(SKY);
+		bdelete.setBackground(SKY);
 		tpanel.setPreferredSize(new Dimension(600, 50));
         bpanel.setPreferredSize(new Dimension(600, 28));
+		bcreate.setIcon(new ImageIcon(create));
+		bcreate.setPressedIcon(new ImageIcon(pcreate));
+		bsettings.setIcon(new ImageIcon(settings));
+		bsettings.setPressedIcon(new ImageIcon(psettings));
     }
     
     public static void showGeneral() {
     	cardlayout.show(cpanel, "m");
+    	flip = 0;
     }
 
     public static void addToDirectory(String name){
@@ -176,6 +192,22 @@ public class Main{
         panel.setLayout(new BorderLayout());
         panel.setPreferredSize(new Dimension(600, 350));
         
+        //Toolbar
+        UIManager.put("MenuItem.selectionBackground", Color.RED);
+        JMenu file = new JMenu("File");
+        JMenu edit = new JMenu("Edit");
+        JMenu omg = new JMenu("omg");
+        JMenu fsettings = new JMenu("Settings");
+        JMenu help = new JMenu("Help");
+        //menubar.setBackground(Color.WHITE);
+        menubar.setBorder(BorderFactory.createEmptyBorder());
+        menubar.add(file);
+        menubar.add(edit);
+        menubar.add(omg);
+        menubar.add(fsettings);
+        menubar.add(help);
+        frame.setJMenuBar(menubar);				//add or subtract menubar?
+        
         //TPanel
         tpanel.setLayout(new BorderLayout());
         tpanel.setPreferredSize(new Dimension(600, 50));
@@ -186,6 +218,20 @@ public class Main{
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setForeground(Color.BLACK);
         tpanel.add(title, BorderLayout.CENTER);
+        
+        bcreate = new JButton(new ImageIcon(create));
+        bcreate.setBackground(Color.WHITE);
+        bcreate.setFocusable(false);
+        bcreate.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        bcreate.setPressedIcon(new ImageIcon(pcreate));
+        tpanel.add(bcreate, BorderLayout.WEST);
+        
+        bsettings = new JButton(new ImageIcon(settings));
+        bsettings.setBackground(SKY);
+        bsettings.setFocusable(false);
+        bsettings.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        bsettings.setPressedIcon(new ImageIcon(psettings));
+        tpanel.add(bsettings, BorderLayout.EAST);
         
         panel.add(tpanel, BorderLayout.NORTH);
         
@@ -198,33 +244,49 @@ public class Main{
         panel.add(bpanel, BorderLayout.SOUTH);
         
         //LPanel
-        badd = new JButton("Add");
-        bplay = new JButton("Play"); //play/stop
-        JLabel ladd = new JLabel("Add");
+        bplay = new JButton("Play");
+        bstop = new JButton("Stop"); //play/stop
+        bloop = new JButton("Loop");
+        bedit = new JButton("Edit");
         JLabel lplay = new JLabel("Play");
+        JLabel lstop = new JLabel("Stop");
+        JLabel lloop = new JLabel("Loop");
+        JLabel ledit = new JLabel("Edit");
         
         lpanel.setLayout(new BoxLayout(lpanel, BoxLayout.Y_AXIS));
         lpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         lpanel.setBackground(Color.WHITE);
         panel.add(lpanel, BorderLayout.WEST);
         
-        addLButton(lpanel, badd, ladd);
         addLButton(lpanel, bplay, lplay);
+        addLButton(lpanel, bstop, lstop);
+        addLButton(lpanel, bloop, lloop);
+        addLButton(lpanel, bedit, ledit);
+        
+        bplay.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//play the macro my guy
+				
+			}
+        	
+        });
         
         
         //RPanel
-        bedit = new JButton("Edit");
-        btrash = new JButton("Trsh");
-        JLabel ledit = new JLabel("Edit");
-        JLabel ltrash = new JLabel("Trsh");
+        breorder = new JButton("Loop");
+        bdelete = new JButton("Dele");
+        JLabel lreorder = new JLabel("Reor");
+        JLabel ldelete = new JLabel("Dele");
         
         rpanel.setLayout(new BoxLayout(rpanel, BoxLayout.Y_AXIS));
         rpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         rpanel.setBackground(Color.WHITE);
         panel.add(rpanel, BorderLayout.EAST);
         
-        addLButton(rpanel, bedit, ledit);
-        addLButton(rpanel, btrash, ltrash);
+        addLButton(rpanel, breorder, lreorder);
+        addLButton(rpanel, bdelete, ldelete);
         
         //CPanel, the motherload, container of the "cards"
         mainmenu = new JPanel();
@@ -304,45 +366,53 @@ public class Main{
             }
         });
 
-        badd.addActionListener(new ActionListener() {
+        bcreate.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardlayout.show(cpanel, "c");
+				flip = 2;
                 panel.setPreferredSize(new Dimension(400, 400));
 				tpanel.setBackground(Color.BLACK);
 				lpanel.setBackground(Color.BLACK);
 				rpanel.setBackground(Color.BLACK);
 				bpanel.setBackground(Color.BLACK);
-				badd.setBackground(Color.BLACK);
 				bplay.setBackground(Color.BLACK);
+				bstop.setBackground(Color.BLACK);
+				bloop.setBackground(Color.BLACK);
 				bedit.setBackground(Color.BLACK);
-				btrash.setBackground(Color.BLACK);
+				breorder.setBackground(Color.BLACK);
+				bdelete.setBackground(Color.BLACK);
 				tpanel.setPreferredSize(new Dimension(600, 20));
                 bpanel.setPreferredSize(new Dimension(600, 20));
+				bcreate.setIcon(new ImageIcon(black));
+				bcreate.setPressedIcon(new ImageIcon(black));
+				bsettings.setIcon(new ImageIcon(black));
+				bsettings.setPressedIcon(new ImageIcon(black));
 				//new CreateWindow(); //RIP CreateWindow
 			}
         	
         });
-
-        bedit.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                if(list.getSelectedValue() != null){
-                    ProcessBuilder p = new ProcessBuilder("Notepad.exe", folder.getPath() + "\\" + list.getSelectedValue() + ".txt");
-                    try {
-                        p.start();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                
-            }
-
-        });
         
+        
+        //Settings menu
+        bsettings.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(flip == 0){		//changes from main to settings
+					cardlayout.show(cpanel, "s");
+					flip = 1;
+				}else if(flip == 1){				//changes from settings to main
+					cardlayout.show(cpanel, "m");
+					flip = 0;
+				}
+				
+			}
+        	
+        });
+
         //Keystroke Execution, uhhh might be useless but reuse mouse click methods and such
         frame.addKeyListener(new KeyListener(){
 
