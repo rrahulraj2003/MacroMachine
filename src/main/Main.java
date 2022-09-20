@@ -323,7 +323,7 @@ public class Main{
 
         //Homepage filling
         if(folder == null){
-            frame.dispose();
+            System.exit(0);
         }else{
             directory = new File(folder.getPath() + "\\macro-directory.txt");
 
