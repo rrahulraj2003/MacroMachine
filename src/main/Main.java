@@ -67,11 +67,9 @@ public class Main{
     private static JLabel bottom;
     private static int x;
     private static int y;
-    private static ArrayList<Long> times = new ArrayList<Long>();
+    private static Action[] actions;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
-
-    private static ArrayList<Action> actions = new ArrayList<Action>();
     
     //Basic Colors
     //private static final Color BK = new Color(5, 19, 54); //background color
@@ -167,6 +165,88 @@ public class Main{
         scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
         frame.setVisible(true);
 
+    }
+
+    static int num;
+
+    public static void runMacro(){
+        
+        if(list.getSelectedValue() != null){
+            
+            try {
+                Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
+                s.nextLine(); s.nextLine(); s.nextLine();
+                actions = new Action[Integer.parseInt(s.nextLine())];
+                num = 0;
+
+                while(s.hasNextLine()){
+
+                    String task = s.nextLine().substring(0, 1);
+
+                    if(task.charAt(0) == '1' || task.charAt(0) == '2' || task.charAt(0) == '3'){
+                        actions[num] = (new Action(Integer.parseInt(s.nextLine()), Integer.parseInt(s.nextLine()), Integer.parseInt(s.nextLine()), Integer.parseInt(task), Integer.parseInt(s.nextLine())));
+                        num++;
+                        //times.add((long) tim);
+                    }else if(task.charAt(0) == '4'){
+                        actions[num] = (new Action(Boolean.parseBoolean(s.nextLine()), Integer.parseInt(s.nextLine())));
+                        num++;
+                        //times.add((long) tim);
+                    }else{
+                        actions[num] = (new Action(Integer.parseInt(s.nextLine()), Boolean.parseBoolean(s.nextLine()), Integer.parseInt(s.nextLine())));
+                        num++;
+                        //times.add((long) tim);
+                    }
+                }
+            } catch (FileNotFoundException e1) { e1.printStackTrace(); JOptionPane.showMessageDialog(Main.frame, "File not found.", "Nonexistence Error", JOptionPane.INFORMATION_MESSAGE); }
+            
+            //run the actions
+            Timer timer = new Timer();
+
+            x = 1; y = 3;
+
+            for( ; x <= 3 ; x++){
+                timer.schedule(new TimerTask() {
+                    int T = y;
+                    @Override
+                    public void run() {
+                        bottom.setText(T + "");
+                    }
+                }, 1000*x);
+                y--;
+            }
+
+            bottom.setText(" ");
+            Main.frame.setAlwaysOnTop(false);
+            Main.frame.toBack();
+
+            x = 0;
+
+            for( ; x < actions.length; x++){
+                int a = x;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        actions[a].run();
+                    }
+                }, (long) actions[a].getTime());
+                
+            }
+
+            x--;
+            num--;
+            
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Main.frame.setAlwaysOnTop(true);
+                    bottom.setText(" ");
+                }
+            }, (long) actions[num].getTime());
+
+        
+            //timer.schedule(task1, 1000);
+
+        }
     }
 
     public Main() throws IOException, AWTException{
@@ -362,96 +442,7 @@ public class Main{
         bplay.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(list.getSelectedValue() != null){
-                    try {
-                        Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
-                        s.nextLine(); s.nextLine(); s.nextLine();
-
-                        while(s.hasNextLine()){
-
-                            String task = s.nextLine();
-
-                            if(task.charAt(0) == '1' || task.charAt(0) == '2' || task.charAt(0) == '3'){
-                                int tas = Integer.parseInt(task.substring(0, 1));
-                                task = task.substring(task.indexOf('>') + 2);
-                                int x = Integer.parseInt(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                int y = Integer.parseInt(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                int but = Integer.parseInt(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                int tim = Integer.parseInt(task);
-                                actions.add(new Action(x, y, but, tas, tim));
-                                times.add((long) tim);
-                            }else if(task.charAt(0) == '4'){
-                                task = task.substring(task.indexOf('>') + 2);
-                                boolean b = Boolean.parseBoolean(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                int tim = Integer.parseInt(task);
-                                actions.add(new Action(b, tim));
-                                times.add((long) tim);
-                            }else{
-                                task = task.substring(task.indexOf('>') + 2);
-                                int x = Integer.parseInt(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                boolean b = Boolean.parseBoolean(task.substring(0, task.indexOf(" ")));
-                                task = task.substring(task.indexOf(' ') + 1);
-                                int tim = Integer.parseInt(task);
-                                actions.add(new Action(x, b, tim));
-                                times.add((long) tim);
-                            }
-                        }
-                    } catch (FileNotFoundException e1) { e1.printStackTrace(); JOptionPane.showMessageDialog(Main.frame, "File not found.", "Nonexistence Error", JOptionPane.INFORMATION_MESSAGE); }
-                    
-                    //run the actions
-                    Timer timer = new Timer();
-
-                    
-
-                    x = 1; y = 3;
-
-                    for( ; x <= 3 ; x++){
-                        timer.schedule(new TimerTask() {
-                            int T = y;
-                            @Override
-                            public void run() {
-                                bottom.setText(T + "");
-                            }
-                        }, 1000*x);
-                        y--;
-                    }
-
-                    bottom.setText(" ");
-                    Main.frame.setAlwaysOnTop(false);
-                    Main.frame.toBack();
-
-                    x = 0;
-
-                    for( ; x < actions.size(); x++){
-                        int a = x;
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                System.out.println(actions.get(a));
-                            }
-                        }, times.get(a));
-                        
-                    }
-
-                    x--;
-                    
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            Main.frame.setAlwaysOnTop(true);
-                            bottom.setText(" ");
-                        }
-                    }, times.get(actions.size() - 1));
-
-				
-                    //timer.schedule(task1, 1000);
-
-                }
+                runMacro();
             }
         });
 

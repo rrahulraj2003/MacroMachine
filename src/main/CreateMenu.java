@@ -102,6 +102,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			case "Space": return KeyEvent.VK_SPACE;
 			case "Meta": return KeyEvent.VK_META;
 			case "Caps Lock": return KeyEvent.VK_CAPS_LOCK;
+			case "Backspace": return KeyEvent.VK_BACK_SPACE;
 
 			case "Up": return KeyEvent.VK_UP;
 			case "Down": return KeyEvent.VK_DOWN;
@@ -167,8 +168,10 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	static ArrayList<String> a = new ArrayList<String>();
+	static int num = 0;
 
 	public static void add(int x, int y, int b, int task, boolean bool, long time){
+		num++;
 		if(task < 4){
 			String t = "";
 			if(task == 1){
@@ -178,12 +181,21 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			}else{
 				t = "3 Release -> ";
 			}
-			tasks.add(t + x + " " + y  + " " + b  + " " + time);
+			tasks.add(t + "");
+			tasks.add(x + "");
+			tasks.add(y + "");
+			tasks.add(b + "");
+			tasks.add(time + "");
 		}else if(task == 4){
-			tasks.add("4 Scroll -> " + bool + " " + time);
+			tasks.add("4 Scroll -> ");
+			tasks.add(bool + "");
+			tasks.add(time + "");
 		}else if(task == 5 || task == 6){
 			String t = task == 5 ? "5 KeyPress -> " : "6 KeyRelease -> ";
-			tasks.add(t + x + " " + bool + " " + time);
+			tasks.add(t + "");
+			tasks.add(x + "");
+			tasks.add(bool + "");
+			tasks.add(time + "");
 		}
 	}
 
@@ -230,6 +242,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 			try {
 				
+				writer.write(num + "\n");
 				for(String act: tasks){
 					writer.write(act + "\n");
 				}

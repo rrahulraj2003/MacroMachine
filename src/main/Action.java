@@ -1,5 +1,4 @@
 package main;
-import java.util.*;
 
 import java.awt.event.*;
 
@@ -19,12 +18,12 @@ public class Action{
     //6 Detect Cursor Color     X and Y (hover) and some method
 
     public int task = 0;
-    private static int X;
-    private static int Y;
-    private static int button;
+    private int X;
+    private int Y;
+    private int button;
 
-    private static Robot bot;
-    private static long time;
+    private Robot bot;
+    private int time;
 
     public int getX(){
         return X;
@@ -59,11 +58,14 @@ public class Action{
         }
     }
 
-    public Action(int x, int y, int b, int cdr, long t){ //1 Click and 2 Drag and 3 Release
-        task = cdr;
-        X = x;
-        Y = y;
-        time = t;
+    public Action(int x, int y, int b, int cdr, int t){ //1 Click and 2 Drag and 3 Release
+        task = Integer.valueOf(cdr);
+        X = Integer.valueOf(x);
+        Y = Integer.valueOf(y);
+
+        time = Integer.valueOf(t);
+        
+        
         if(b == 1){
             button = 1024;
         }else if(b == 2){
@@ -78,12 +80,12 @@ public class Action{
         }
     }
     
-    public static void click() throws AWTException{
+    public void click() throws AWTException{
         bot.mouseMove(X, Y); 
         bot.mousePress(button);
     }
 
-    public static void move() throws AWTException{
+    public void move() throws AWTException{
         bot.mouseMove(X, Y);
     }
 
@@ -93,10 +95,10 @@ public class Action{
 
 
 
-    public Action(boolean scroll, long t){ //4 Scroll
-        task = 4;
+    public Action(boolean scroll, int t){ //4 Scroll
+        task = Integer.valueOf(4);
         X = scroll ? 1 : -1;
-        time = t;
+        time = Integer.valueOf(t);
         try {
             bot = new Robot();
         } catch (AWTException e) {
@@ -104,16 +106,16 @@ public class Action{
         }
     }
 
-    public static void scroll() throws AWTException{
+    public void scroll() throws AWTException{
         bot.mouseWheel(X);
     }
 
 
 
-    public Action(int k, boolean pressOrRelease, long t){ //5 KeyPress and //6 KeyRelease
+    public Action(int k, boolean pressOrRelease, int t){ //5 KeyPress and //6 KeyRelease
         task = pressOrRelease ? 5 : 6;
-        X = k;
-        time = t;
+        X = Integer.valueOf(k);
+        time = Integer.valueOf(t);
         try {
             bot = new Robot();
         } catch (AWTException e) {
@@ -121,11 +123,11 @@ public class Action{
         }
     }
 
-    public static void keyPress() throws AWTException {
+    public void keyPress() throws AWTException {
     	bot.keyPress(X);
     }
 
-    public static void keyRelease() throws AWTException {
+    public void keyRelease() throws AWTException {
     	bot.keyRelease(X);
     }
 
@@ -137,27 +139,27 @@ public class Action{
 
         switch(task){
             case 1: //Click
-                System.out.println("Click: " + X + ", " + Y + ", " + time);
+                System.out.print("Click: " + X + ", " + Y + ", " + time);
             break;
 
             case 2: //Move
-                System.out.println("Move: " + X + ", " + Y + ", " + time);
+                System.out.print("Move: " + X + ", " + Y + ", " + time);
             break;
 
             case 3: //Release
-                System.out.println("Release: " + X + ", " + Y + ", " + time);
+                System.out.print("Release: " + X + ", " + Y + ", " + time);
             break;
 
             case 4: //Scroll
-                System.out.println("Scroll: " + X + ", " + time);
+                System.out.print("Scroll: " + X + ", " + time);
             break;
             
             case 5: //Keypress
-                System.out.println("Keypress: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
+                System.out.print("Keypress: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
             break;
 
             case 6: //Keyrelease
-                System.out.println("Keyrelease: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
+                System.out.print("Keyrelease: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
             break;
             
         }
