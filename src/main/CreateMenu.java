@@ -158,7 +158,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	private static boolean runnin = false;
-	private static ArrayList<String> actions = new ArrayList<String>();
+	private static ArrayList<String> tasks = new ArrayList<String>();
 	private static long startTime = 0;
 
 	public static void start(){
@@ -167,7 +167,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	static ArrayList<String> a = new ArrayList<String>();
-	static Action aa;
 
 	public static void add(int x, int y, int b, int task, boolean bool, long time){
 		if(task < 4){
@@ -179,14 +178,13 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			}else{
 				t = "3 Release -> ";
 			}
-			actions.add(t + " " + x + " " + y  + " " + b  + " " + time);
+			tasks.add(t + x + " " + y  + " " + b  + " " + time);
 		}else if(task == 4){
-			actions.add("4 Scroll -> " + " " + bool + " " + time);
+			tasks.add("4 Scroll -> " + bool + " " + time);
 		}else if(task == 5 || task == 6){
 			String t = task == 5 ? "5 KeyPress -> " : "6 KeyRelease -> ";
-			actions.add(t + " " + x + " " + bool + " " + time);
+			tasks.add(t + x + " " + bool + " " + time);
 		}
-		//System.out.println(actions.get(actions.size() - 1));
 	}
 
 	public void nativeMousePressed(NativeMouseEvent e) { //1 Click
@@ -232,7 +230,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 			try {
 				
-				for(String act: actions){
+				for(String act: tasks){
 					writer.write(act + "\n");
 				}
 
@@ -364,8 +362,8 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		CardLayout cardlayout = new CardLayout();
 		
 		//TPanel
-		ImageIcon icon = new ImageIcon(Main.pcreate);
-		JLabel createmacro = new JLabel("Create Your Macro");
+		ImageIcon icon = new ImageIcon(Main.class.getResource("/main/ccreate.png"));
+		JLabel createmacro = new JLabel(" Create Your Macro");
 		
 		add(tpanel, BorderLayout.NORTH);
 		tpanel.setLayout(new FlowLayout());
@@ -374,7 +372,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		tpanel.add(new JLabel(icon));
 		tpanel.add(createmacro);
 		createmacro.setBorder(BorderFactory.createEmptyBorder(4, 0, 5, 15));
-		createmacro.setFont(new Font(Font.SERIF, Font.BOLD, 18));
+		createmacro.setFont(new Font(Font.SERIF, Font.BOLD, 22));
 		
 		//GeneralCard
 		JLabel nameanddesc = new JLabel("Name and Description");
@@ -385,8 +383,8 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		JLabel recordmacro = new JLabel("Record Macro");
 		record = new JButton("Record");
 		
-		namefield.setPreferredSize(new Dimension(400, 23));
-		infofield.setPreferredSize(new Dimension(400, 23));
+		namefield.setPreferredSize(new Dimension(370, 23));
+		infofield.setPreferredSize(new Dimension(370, 23));
 
 		//make namefield and infofield so that it can be focused and unfocused
 

@@ -1,3 +1,5 @@
+/*
+
 package main;
 
 //That moment when you write some code and then
@@ -39,3 +41,5 @@ public class Move {
 	public void setValue(int s) { value = s; }
 
 }
+
+*/

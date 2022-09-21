@@ -1,7 +1,7 @@
 package main;
 import java.util.*;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import java.awt.event.*;
 
 import java.awt.*;
 
@@ -59,6 +59,7 @@ public class Action extends TimerTask{
         task = cdr;
         X = x;
         Y = y;
+        time = t;
         if(b == 1){
             button = 1024;
         }else if(b == 2){
@@ -91,6 +92,7 @@ public class Action extends TimerTask{
     public Action(boolean scroll, long t){ //4 Scroll
         task = 4;
         X = scroll ? 1 : -1;
+        time = t;
         try {
             bot = new Robot();
         } catch (AWTException e) {
@@ -104,9 +106,10 @@ public class Action extends TimerTask{
 
 
 
-    public Action(int k, boolean pressOrRelease, long t){ //4 KeyPress and //5 KeyRelease
+    public Action(int k, boolean pressOrRelease, long t){ //5 KeyPress and //6 KeyRelease
         task = pressOrRelease ? 5 : 6;
         X = k;
+        time = t;
         try {
             bot = new Robot();
         } catch (AWTException e) {
@@ -130,27 +133,27 @@ public class Action extends TimerTask{
 
         switch(task){
             case 1: //Click
-                System.out.println("Click: " + X + ", " + Y);
+                System.out.println("Click: " + X + ", " + Y + ", " + time);
             break;
 
             case 2: //Move
-                System.out.println("Move: " + X + ", " + Y);
+                System.out.println("Move: " + X + ", " + Y + ", " + time);
             break;
 
             case 3: //Release
-                System.out.println("Release: " + X + ", " + Y);
+                System.out.println("Release: " + X + ", " + Y + ", " + time);
             break;
 
             case 4: //Scroll
-                System.out.println("Scroll: " + X);
+                System.out.println("Scroll: " + X + ", " + time);
             break;
             
             case 5: //Keypress
-                System.out.println("Keypress: " + NativeKeyEvent.getKeyText(X));
+                System.out.println("Keypress: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
             break;
 
             case 6: //Keyrelease
-                System.out.println("Keyrelease: " + NativeKeyEvent.getKeyText(X));
+                System.out.println("Keyrelease: " + KeyEvent.getKeyText(X) + ", (" + X + "), " + time);
             break;
             
         }

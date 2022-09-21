@@ -6,7 +6,7 @@ Issues/Fix these stuff:
 * Resizing of window and keeping all other buttons along the sides somehow
 * 
 
-*/
+
 
 package main;
 
@@ -454,13 +454,5 @@ public class Main{
     }
     
 }
-
-/*
-
-    JTextArea t = new JTextArea("OOO");
-    t.setFont(TEXT);
-    t.setForeground(COLOR);
-    t.setBounds(0, 40, 100, 50);
-    panel.add(t);
 
 */

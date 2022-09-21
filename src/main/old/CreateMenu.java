@@ -5,7 +5,7 @@
     ||       2022-2022       ||
     ---------------------------
 
-*/
+
 package main;
 
 import java.awt.*;
@@ -279,12 +279,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		add(isKey(NativeKeyEvent.getKeyText(e.getKeyCode())), 0, 0, 6, false, System.currentTimeMillis() - startTime);
 
 	}
-
-	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-	/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 
 	private static void record(){
 		record.setText("Record");
@@ -677,3 +671,5 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 }
+
+*/

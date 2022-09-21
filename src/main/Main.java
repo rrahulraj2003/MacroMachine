@@ -98,8 +98,10 @@ public class Main{
 		bplay.setBackground(SKY);
 		bedit.setBackground(SKY);
 		btrash.setBackground(SKY);
-		tpanel.setPreferredSize(new Dimension(600, 50));
-        bpanel.setPreferredSize(new Dimension(600, 28));
+		tpanel.setPreferredSize(new Dimension(500, 50));
+        bpanel.setPreferredSize(new Dimension(500, 28));
+        lpanel.setPreferredSize(new Dimension(65, 500));
+        rpanel.setPreferredSize(new Dimension(65, 500));
     }
     
     public static void showGeneral() {
@@ -167,18 +169,18 @@ public class Main{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension size = Toolkit. getDefaultToolkit(). getScreenSize();
         //System.out.println(frame.getSize());
-        frame.setLocation((int)size.getWidth()/2 - 300, (int)size.getHeight()/2 - 165);
+        frame.setLocation((int)size.getWidth()/2 - 300, (int)size.getHeight()/2 - 150);
         frame.setAlwaysOnTop(true);
         frame.setVisible(true);
         frame.add(panel);
         
         //Panel
         panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(600, 300));
+        panel.setPreferredSize(new Dimension(500, 280));
         
         //TPanel
         tpanel.setLayout(new BorderLayout());
-        tpanel.setPreferredSize(new Dimension(600, 50));
+        tpanel.setPreferredSize(new Dimension(500, 50));
         tpanel.setBackground(SKY);
         
         JLabel title = new JLabel("MacroMaster");
@@ -194,7 +196,7 @@ public class Main{
         bottom.setForeground(Color.BLACK);
         bpanel.add(bottom);
         bpanel.setBackground(SKY);
-        bpanel.setPreferredSize(new Dimension(600, 28));
+        bpanel.setPreferredSize(new Dimension(400, 28));
         panel.add(bpanel, BorderLayout.SOUTH);
         
         //LPanel
@@ -214,9 +216,9 @@ public class Main{
         
         //RPanel
         bedit = new JButton("Edit");
-        btrash = new JButton("?");
+        btrash = new JButton("Trs");
         JLabel ledit = new JLabel("Edit");
-        JLabel ltrash = new JLabel("Trsh");
+        JLabel ltrash = new JLabel("Trs");
         
         rpanel.setLayout(new BoxLayout(rpanel, BoxLayout.Y_AXIS));
         rpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -314,7 +316,7 @@ public class Main{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardlayout.show(cpanel, "c");
-                panel.setPreferredSize(new Dimension(400, 400));
+                panel.setPreferredSize(new Dimension(500, 280));
 				tpanel.setBackground(Color.BLACK);
 				lpanel.setBackground(Color.BLACK);
 				rpanel.setBackground(Color.BLACK);
@@ -323,8 +325,10 @@ public class Main{
 				bplay.setBackground(Color.BLACK);
 				bedit.setBackground(Color.BLACK);
 				btrash.setBackground(Color.BLACK);
-				tpanel.setPreferredSize(new Dimension(600, 20));
-                bpanel.setPreferredSize(new Dimension(600, 20));
+				tpanel.setPreferredSize(new Dimension(400, 20));
+                bpanel.setPreferredSize(new Dimension(400, 20));
+                lpanel.setPreferredSize(new Dimension(40, 500));
+                rpanel.setPreferredSize(new Dimension(40, 500));
 				//new CreateWindow(); //RIP CreateWindow
 			}
         	
@@ -351,14 +355,51 @@ public class Main{
         bplay.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(list.getSelectedValue() == null){
+                if(list.getSelectedValue() != null){
                     try {
                         Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
-                    
+                        s.nextLine(); s.nextLine(); s.nextLine();
+                        ArrayList<Action> actions = new ArrayList<Action>();
 
+                        while(s.hasNextLine()){
+
+                            String task = s.nextLine();
+
+                            if(task.charAt(0) == '1' || task.charAt(0) == '2' || task.charAt(0) == '3'){
+                                int tas = Integer.parseInt(task.substring(0, 1));
+                                task = task.substring(task.indexOf('>') + 2);
+                                int x = Integer.parseInt(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                int y = Integer.parseInt(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                int but = Integer.parseInt(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                int tim = Integer.parseInt(task);
+                                actions.add(new Action(x, y, but, tas, tim));
+                            }else if(task.charAt(0) == '4'){
+                                task = task.substring(task.indexOf('>') + 2);
+                                boolean b = Boolean.parseBoolean(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                int tim = Integer.parseInt(task);
+                                actions.add(new Action(b, tim));
+                            }else{
+                                task = task.substring(task.indexOf('>') + 2);
+                                int x = Integer.parseInt(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                boolean b = Boolean.parseBoolean(task.substring(0, task.indexOf(" ")));
+                                task = task.substring(task.indexOf(' ') + 1);
+                                int tim = Integer.parseInt(task);
+                                actions.add(new Action(x, b, tim));
+                            }
+                            System.out.print(actions.get(actions.size() - 1));
+
+                        }
     
                         s.close();
-                    } catch (FileNotFoundException e1) { e1.printStackTrace(); }
+                    } catch (FileNotFoundException e1) { e1.printStackTrace(); JOptionPane.showMessageDialog(Main.frame, "File not found.", "Nonexistence Error", JOptionPane.INFORMATION_MESSAGE); }
+                    
+                    //run the actions
+
                 }
             }
         });
