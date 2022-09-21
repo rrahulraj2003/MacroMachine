@@ -22,7 +22,6 @@ import java.util.Timer;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -44,9 +43,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	private static JTextField infofield;
 	private static JTextArea codearea;
 	private static FileWriter writer;
-
-	private JTextField recorded;
-	private static StringBuilder display = new StringBuilder("");
 
 	public static int isKey(String key){
 
@@ -136,27 +132,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		return -1;
 			
 	}
-
-	public void displayRecording(KeyEvent e){ //Ignore for now
-		System.out.println(e.getKeyCode());
-
-		if(e.getKeyCode() == 17){
-			display.delete(0, 5);
-			display.append("Ctrl");
-			//recorded.setText(display.toString());
-		}else if(e.getKeyCode() == 16){
-			if(display.toString().contains("Ctrl")) display.append(" + ");
-			display.append("Shift");
-			//recorded.setText(display.toString());
-		}else{
-			display.append(" + " + e.getExtendedKeyCode());
-			//recorded.setText(display.toString());
-		}
-		
-		//IN PROGRESS
-		
-	}
-
+	
 	public static boolean validName(String str){
 
 		if(str.contains("\\") || str.contains("/") || str.contains(":") || str.contains("*") || str.contains("?") || str.contains("\"") || str.contains("<") || str.contains(">") || str.contains("|")){
@@ -195,11 +171,20 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 	public static void add(int x, int y, int b, int task, boolean bool, long time){
 		if(task < 4){
-			actions.add(task + " " + x + " " + y  + " " + b  + " " + time);
+			String t = "";
+			if(task == 1){
+				t = "1 Click -> ";
+			}else if(task == 2){
+				t = "2 Move -> ";
+			}else{
+				t = "3 Release -> ";
+			}
+			actions.add(t + " " + x + " " + y  + " " + b  + " " + time);
 		}else if(task == 4){
-			actions.add(task + " " + bool + " " + time);
+			actions.add("4 Scroll -> " + " " + bool + " " + time);
 		}else if(task == 5 || task == 6){
-			actions.add(task + " " + x + " " + bool + " " + time);
+			String t = task == 5 ? "5 KeyPress -> " : "6 KeyRelease -> ";
+			actions.add(t + " " + x + " " + bool + " " + time);
 		}
 		//System.out.println(actions.get(actions.size() - 1));
 	}
@@ -213,9 +198,9 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	public void nativeMouseDragged(NativeMouseEvent e) { //2 Drag
-		System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+		System.out.println("Mouse Moved: " + e.getX() + ", " + e.getY());
 		if(!runnin) start();
-		add(e.getX(), e.getY(), e.getButton(), 2, false, System.currentTimeMillis() - startTime);
+		add(e.getX(), e.getY(), 1 /* keep it to left click for now */, 2, false, System.currentTimeMillis() - startTime);
 	}
 
 	public void nativeMouseReleased(NativeMouseEvent e){ //3 Release
@@ -248,8 +233,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			try {
 				
 				for(String act: actions){
-					writer.write(act + "\n\n");
-					System.out.println(act);
+					writer.write(act + "\n");
 				}
 
 				writer.close();
@@ -260,9 +244,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		    	namefield.setText("");
 		    	infofield.setText("");
 		    	//recorded.setText("");
-		    	display.delete(0, display.length());
-		    	display.append("empty");
-		    	Main.revert();
+				Main.revert();
 				
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -351,8 +333,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 			namefield.setText("");
 			infofield.setText("");
 			//recorded.setText("");
-			display.delete(0, display.length());
-			display.append("empty");
 			Main.revert();
 			Main.frame.pack();
 
@@ -386,8 +366,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		//TPanel
 		ImageIcon icon = new ImageIcon(Main.pcreate);
 		JLabel createmacro = new JLabel("Create Your Macro");
-		JButton general = new JButton("General");
-		JButton code = new JButton("Code");
 		
 		add(tpanel, BorderLayout.NORTH);
 		tpanel.setLayout(new FlowLayout());
@@ -397,20 +375,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		tpanel.add(createmacro);
 		createmacro.setBorder(BorderFactory.createEmptyBorder(4, 0, 5, 15));
 		createmacro.setFont(new Font(Font.SERIF, Font.BOLD, 18));
-		general.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		general.setBackground(Color.WHITE);
-		general.setFocusable(false);
-		general.setPreferredSize(new Dimension(70, 30));
-		code.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		code.setBackground(Color.WHITE);
-		code.setFocusable(false);
-		code.setPreferredSize(new Dimension(50, 30));
-		tpanel.add(general);
-		JLabel space = new JLabel(".");
-		space.setForeground(Color.WHITE);
-		space.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 8));
-		tpanel.add(space);
-		tpanel.add(code);
 		
 		//GeneralCard
 		JLabel nameanddesc = new JLabel("Name and Description");
@@ -418,10 +382,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		TextPrompt nametext = new TextPrompt("Name", namefield); nametext.getClass(); //to get rid of yellow line
 		infofield = new JTextField();
 		TextPrompt infotext = new TextPrompt("Information about the macro", infofield); infotext.getClass();
-		JLabel recordhotkey = new JLabel("Record Hotkey");
-		JButton recordkey = new JButton("Record Key");
-		recorded = new JTextField("(in progress)");
-		JButton settona = new JButton("Set to N/A");
 		JLabel recordmacro = new JLabel("Record Macro");
 		record = new JButton("Record");
 		
@@ -460,43 +420,21 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		g.gridy = 3;
 		g.gridwidth = 3;
 		g.fill = GridBagConstraints.HORIZONTAL;
-		recordhotkey.setFont(HEAD);
-		generalcard.add(recordhotkey, g);
 		
 		g.gridx = 0;
 		g.gridy = 4;
 		g.gridwidth = 1;
 		g.fill = GridBagConstraints.HORIZONTAL;
-		recordkey.setBackground(Color.WHITE);
-		recordkey.setFocusable(false);
-		generalcard.add(recordkey, g);
-
-		recordkey.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
 		
 		g.gridx = 1;
 		g.gridy = 4;
 		g.gridwidth = 1;
 		g.fill = GridBagConstraints.HORIZONTAL;
-		recorded.setPreferredSize(new Dimension(200, 25));
-		recorded.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-		recorded.setFocusable(false);
-		recorded.setHorizontalAlignment(JTextField.CENTER);
-		recorded.setFont(new FontUIResource(Font.DIALOG, Font.PLAIN, 18));
-		recorded.setForeground(Color.BLACK);
-		generalcard.add(recorded, g);
 		
 		g.gridx = 2;
 		g.gridy = 4;
 		g.gridwidth = 1;
 		g.fill = GridBagConstraints.HORIZONTAL;
-		settona.setBackground(Color.WHITE);
-		settona.setFocusable(false);
-		generalcard.add(settona, g);
 		
 		g.gridx = 0;
 		g.gridy = 5;
@@ -638,8 +576,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 						infofield.setText("");
 						record.setText("Record");
 						//recorded.setText("");
-						display.delete(0, display.length());
-						display.append("empty");
 						Main.revert();
 						
 					}
@@ -649,28 +585,10 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 					infofield.setText("");
 					record.setText("Record");
 					//recorded.setText("");
-					display.delete(0, display.length());
-					display.append("empty");
 					Main.revert();
 				}
 
 				
-			}
-		});
-		
-		general.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cardlayout.show(cards, "1");
-				space.setForeground(Color.WHITE);
-			}
-		});
-		
-		code.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cardlayout.show(cards, "2");
-				space.setForeground(Color.BLACK);
 			}
 		});
 		

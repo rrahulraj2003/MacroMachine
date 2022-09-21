@@ -174,7 +174,7 @@ public class Main{
         
         //Panel
         panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(600, 350));
+        panel.setPreferredSize(new Dimension(600, 300));
         
         //TPanel
         tpanel.setLayout(new BorderLayout());
@@ -214,7 +214,7 @@ public class Main{
         
         //RPanel
         bedit = new JButton("Edit");
-        btrash = new JButton("Trsh");
+        btrash = new JButton("?");
         JLabel ledit = new JLabel("Edit");
         JLabel ltrash = new JLabel("Trsh");
         
@@ -294,12 +294,17 @@ public class Main{
         //Changing infobar to display info of selected
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                try (Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"))) {
-                    s.nextLine();
-                    String str = s.nextLine();
-                    bottom.setText(str);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                
+                if(list.getSelectedValue() == null){
+
+                    try (Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"))) {
+                        s.nextLine();
+                        String str = s.nextLine();
+                        bottom.setText(str);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         });
@@ -342,6 +347,32 @@ public class Main{
             }
 
         });
+
+        bplay.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(list.getSelectedValue() == null){
+                    try {
+                        Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
+                    
+
+    
+                        s.close();
+                    } catch (FileNotFoundException e1) { e1.printStackTrace(); }
+                }
+            }
+        });
+
+        btrash.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                //delete list.getSelectedValue() macro and update 
+                
+            }
+
+        });
         
         //Keystroke Execution, uhhh might be useless but reuse mouse click methods and such
         frame.addKeyListener(new KeyListener(){
@@ -370,8 +401,6 @@ public class Main{
                 //any method that is executed when the window is closed
             }
         });
-
-        
 
     }
 
