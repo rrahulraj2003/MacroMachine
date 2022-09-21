@@ -25,6 +25,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TimerTask;
+import java.util.Timer;
 
 
 
@@ -63,8 +65,13 @@ public class Main{
     private static JScrollPane scp;
     private static JPanel mainmenu;
     private static JLabel bottom;
+    private static int x;
+    private static int y;
+    private static ArrayList<Long> times = new ArrayList<Long>();
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
+
+    private static ArrayList<Action> actions = new ArrayList<Action>();
     
     //Basic Colors
     //private static final Color BK = new Color(5, 19, 54); //background color
@@ -359,7 +366,6 @@ public class Main{
                     try {
                         Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
                         s.nextLine(); s.nextLine(); s.nextLine();
-                        ArrayList<Action> actions = new ArrayList<Action>();
 
                         while(s.hasNextLine()){
 
@@ -376,12 +382,14 @@ public class Main{
                                 task = task.substring(task.indexOf(' ') + 1);
                                 int tim = Integer.parseInt(task);
                                 actions.add(new Action(x, y, but, tas, tim));
+                                times.add((long) tim);
                             }else if(task.charAt(0) == '4'){
                                 task = task.substring(task.indexOf('>') + 2);
                                 boolean b = Boolean.parseBoolean(task.substring(0, task.indexOf(" ")));
                                 task = task.substring(task.indexOf(' ') + 1);
                                 int tim = Integer.parseInt(task);
                                 actions.add(new Action(b, tim));
+                                times.add((long) tim);
                             }else{
                                 task = task.substring(task.indexOf('>') + 2);
                                 int x = Integer.parseInt(task.substring(0, task.indexOf(" ")));
@@ -390,15 +398,58 @@ public class Main{
                                 task = task.substring(task.indexOf(' ') + 1);
                                 int tim = Integer.parseInt(task);
                                 actions.add(new Action(x, b, tim));
+                                times.add((long) tim);
                             }
-                            System.out.print(actions.get(actions.size() - 1));
-
                         }
-    
-                        s.close();
                     } catch (FileNotFoundException e1) { e1.printStackTrace(); JOptionPane.showMessageDialog(Main.frame, "File not found.", "Nonexistence Error", JOptionPane.INFORMATION_MESSAGE); }
                     
                     //run the actions
+                    Timer timer = new Timer();
+
+                    
+
+                    x = 1; y = 3;
+
+                    for( ; x <= 3 ; x++){
+                        timer.schedule(new TimerTask() {
+                            int T = y;
+                            @Override
+                            public void run() {
+                                bottom.setText(T + "");
+                            }
+                        }, 1000*x);
+                        y--;
+                    }
+
+                    bottom.setText(" ");
+                    Main.frame.setAlwaysOnTop(false);
+                    Main.frame.toBack();
+
+                    x = 0;
+
+                    for( ; x < actions.size(); x++){
+                        int a = x;
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                System.out.println(actions.get(a));
+                            }
+                        }, times.get(a));
+                        
+                    }
+
+                    x--;
+                    
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Main.frame.setAlwaysOnTop(true);
+                            bottom.setText(" ");
+                        }
+                    }, times.get(actions.size() - 1));
+
+				
+                    //timer.schedule(task1, 1000);
 
                 }
             }

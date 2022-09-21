@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 import java.awt.*;
 
-public class Action extends TimerTask{
+public class Action{
 
     //1 Click                   X and Y
     //2 Move                    X and Y
@@ -36,6 +36,10 @@ public class Action extends TimerTask{
 
     public int getButton(){
         return button;
+    }
+
+    public long getTime(){
+        return time;
     }
 
     public void set(int x, int y){
@@ -161,7 +165,6 @@ public class Action extends TimerTask{
         return "";
     }
 
-    @Override
     public void run() {
         
         switch(task){
