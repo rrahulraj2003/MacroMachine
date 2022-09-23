@@ -65,9 +65,7 @@ public class Main{
     private static JScrollPane scp;
     private static JPanel mainmenu;
     private static JLabel bottom;
-    private static int x;
-    private static int y;
-    private static Action[] actions;
+    private static ArrayList<Action> actions;
     public static java.net.URL create = Main.class.getResource("/main/create.png");
     public static java.net.URL pcreate = Main.class.getResource("/main/pcreate.png");
     
@@ -172,29 +170,39 @@ public class Main{
     public static void runMacro(){
         
         if(list.getSelectedValue() != null){
-            
+
+            actions = new ArrayList<Action>();
+            Action a = new Action(0);
+
             try {
                 Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"));
                 s.nextLine(); s.nextLine(); s.nextLine();
-                actions = new Action[Integer.parseInt(s.nextLine())];
-                num = 0;
+                
 
                 while(s.hasNextLine()){
 
-                    String task = s.nextLine().substring(0, 1);
+                    StringBuilder task = new StringBuilder(s.nextLine()); task.delete(0, task.indexOf(">") + 2);
 
                     if(task.charAt(0) == '1' || task.charAt(0) == '2' || task.charAt(0) == '3'){
-                        actions[num] = (new Action(Integer.parseInt(s.nextLine()), Integer.parseInt(s.nextLine()), Integer.parseInt(s.nextLine()), Integer.parseInt(task), Integer.parseInt(s.nextLine())));
-                        num++;
-                        //times.add((long) tim);
+                        a = new Action(Integer.parseInt(task.charAt(0) + "")); task.delete(0, task.indexOf(" ") + 1);
+                        a.setX(Integer.parseInt(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setY(Integer.parseInt(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setB(Integer.parseInt(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setTime(Long.parseLong(task.toString()) + 3000);
+                        actions.add(a);
                     }else if(task.charAt(0) == '4'){
-                        actions[num] = (new Action(Boolean.parseBoolean(s.nextLine()), Integer.parseInt(s.nextLine())));
-                        num++;
-                        //times.add((long) tim);
+                        a = new Action(Integer.parseInt(task.charAt(0) + "")); task.delete(0, task.indexOf(" ") + 1);
+                        a.setBool(Boolean.parseBoolean(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setTime(Long.parseLong(task.toString()) + 3000);
+                        actions.add(a);
+                    }else if(task.charAt(0) == '5' || task.charAt(0) == '6'){
+                        a = new Action(Integer.parseInt(task.charAt(0) + "")); task.delete(0, task.indexOf(" ") + 1);
+                        a.setX(Integer.parseInt(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setBool(Boolean.parseBoolean(task.substring(0, task.indexOf(" ")))); task.delete(0, task.indexOf(" ") + 1);
+                        a.setTime(Long.parseLong(task.toString()) + 3000);
+                        actions.add(a);
                     }else{
-                        actions[num] = (new Action(Integer.parseInt(s.nextLine()), Boolean.parseBoolean(s.nextLine()), Integer.parseInt(s.nextLine())));
-                        num++;
-                        //times.add((long) tim);
+                        System.out.println("Couldn't read properly, dummy");
                     }
                 }
             } catch (FileNotFoundException e1) { e1.printStackTrace(); JOptionPane.showMessageDialog(Main.frame, "File not found.", "Nonexistence Error", JOptionPane.INFORMATION_MESSAGE); }
@@ -202,47 +210,56 @@ public class Main{
             //run the actions
             Timer timer = new Timer();
 
-            x = 1; y = 3;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    bottom.setText(3 + "");
+                }
+            }, 0);
 
-            for( ; x <= 3 ; x++){
-                timer.schedule(new TimerTask() {
-                    int T = y;
-                    @Override
-                    public void run() {
-                        bottom.setText(T + "");
-                    }
-                }, 1000*x);
-                y--;
-            }
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    bottom.setText(2 + "");
+                }
+            }, 1000);
 
-            bottom.setText(" ");
-            Main.frame.setAlwaysOnTop(false);
-            Main.frame.toBack();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    bottom.setText(1 + "");
+                }
+            }, 2000);
 
-            x = 0;
-
-            for( ; x < actions.length; x++){
-                int a = x;
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        actions[a].run();
-                    }
-                }, (long) actions[a].getTime());
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    bottom.setText(" ");
+                    Main.frame.setAlwaysOnTop(false);
+                    Main.frame.toBack();
+                }
+            }, 3000);
                 
-            }
 
-            x--;
-            num--;
-            
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Main.frame.setAlwaysOnTop(true);
-                    bottom.setText(" ");
+                    bottom.setText("Macro Played!");
                 }
-            }, (long) actions[num].getTime());
+            }, (actions.get(actions.size() - 1).getTime()) + 3000);
 
+
+            for(int x = 0 ; x < actions.size(); x++){
+                int z = x;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        actions.get(z).run();
+                    }
+                }, actions.get(z).getTime());
+                
+            }
         
             //timer.schedule(task1, 1000);
 
@@ -383,13 +400,14 @@ public class Main{
         //Changing infobar to display info of selected
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                
-                if(list.getSelectedValue() == null){
+
+                if(list.getSelectedValue() != null){
 
                     try (Scanner s = new Scanner(new File(folder.getPath() + "\\" + list.getSelectedValue() + ".txt"))) {
                         s.nextLine();
                         String str = s.nextLine();
                         bottom.setText(str);
+                        s.close();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -463,7 +481,7 @@ public class Main{
         	//Action Creation
             @Override
             public void keyPressed(KeyEvent e) { //"m" = 77, "a" = 65
-                System.out.println(e.getKeyCode());
+                //System.out.println(e.getKeyCode());
                 //keyPress(e);
                 //if(createmenu.recording){
                 //    createmenu.displayRecording(e);

@@ -23,7 +23,8 @@ public class Action{
     private int button;
 
     private Robot bot;
-    private int time;
+    private long time;
+    private boolean bool;
 
     public int getX(){
         return X;
@@ -41,9 +42,24 @@ public class Action{
         return time;
     }
 
-    public void set(int x, int y){
+    public void setX(int x){
         X = x;
+    }
+
+    public void setY(int y){
         Y = y;
+    }
+
+    public void setB(int b){
+        button = b;
+    }
+
+    public void setTime(long t){
+        time = t;
+    }
+
+    public void setBool(boolean b){
+        bool = b;
     }
 
     public long time(){
@@ -58,21 +74,8 @@ public class Action{
         }
     }
 
-    public Action(int x, int y, int b, int cdr, int t){ //1 Click and 2 Drag and 3 Release
-        task = Integer.valueOf(cdr);
-        X = Integer.valueOf(x);
-        Y = Integer.valueOf(y);
-
-        time = Integer.valueOf(t);
-        
-        
-        if(b == 1){
-            button = 1024;
-        }else if(b == 2){
-            button = 2048;
-        }else{
-            button = 4096;
-        }
+    public Action(int t){
+        task = t;
         try {
             bot = new Robot();
         } catch (AWTException e) {
@@ -81,8 +84,18 @@ public class Action{
     }
     
     public void click() throws AWTException{
-        bot.mouseMove(X, Y); 
-        bot.mousePress(button);
+        bot.mouseMove(X, Y);
+        int butt = -1;
+        if(button == 1){
+            butt = 1024;
+        }else if(button == 2){
+            butt = 2048;
+        }else if(button == 3){
+            butt = 4096;
+        }else{
+            System.out.println("Mouse button ERROR (CLICK)");
+        }
+        bot.mousePress(butt);
     }
 
     public void move() throws AWTException{
@@ -90,37 +103,27 @@ public class Action{
     }
 
     public void release() throws AWTException{
-        bot.mouseRelease(button);
-    }
-
-
-
-    public Action(boolean scroll, int t){ //4 Scroll
-        task = Integer.valueOf(4);
-        X = scroll ? 1 : -1;
-        time = Integer.valueOf(t);
-        try {
-            bot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
+        int butt = -1;
+        if(button == 1){
+            butt = 1024;
+        }else if(button == 2){
+            butt = 2048;
+        }else if(button == 3){
+            butt = 4096;
+        }else{
+            System.out.println("Mouse button ERROR (RELEASE)");
         }
+        bot.mouseRelease(butt);
     }
 
     public void scroll() throws AWTException{
-        bot.mouseWheel(X);
-    }
-
-
-
-    public Action(int k, boolean pressOrRelease, int t){ //5 KeyPress and //6 KeyRelease
-        task = pressOrRelease ? 5 : 6;
-        X = Integer.valueOf(k);
-        time = Integer.valueOf(t);
-        try {
-            bot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
+        int updown = -1;
+        if(bool){
+            updown = 1;
+        }else{
+            updown = -1;
         }
+        bot.mouseWheel(updown);
     }
 
     public void keyPress() throws AWTException {
@@ -130,10 +133,6 @@ public class Action{
     public void keyRelease() throws AWTException {
     	bot.keyRelease(X);
     }
-
-    //a
-
-
 
     public String toString(){
 

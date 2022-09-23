@@ -168,38 +168,24 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	}
 
 	static ArrayList<String> a = new ArrayList<String>();
-	static int num = 0;
 
 	public static void add(int x, int y, int b, int task, boolean bool, long time){
-		num++;
 		if(task < 4){
-			String t = "";
-			if(task == 1){
-				t = "1 Click -> ";
-			}else if(task == 2){
-				t = "2 Move -> ";
-			}else{
-				t = "3 Release -> ";
+			String t = "Click -> 1";
+			if(task == 2){
+				t = "Move -> 2";
+			}else if(task == 3){
+				t = "Release -> 3";
 			}
-			tasks.add(t + "");
-			tasks.add(x + "");
-			tasks.add(y + "");
-			tasks.add(b + "");
-			tasks.add(time + "");
+			tasks.add(t + " " + x + " " + y + " " + b + " " + time);
 		}else if(task == 4){
-			tasks.add("4 Scroll -> ");
-			tasks.add(bool + "");
-			tasks.add(time + "");
+			tasks.add("Scroll -> 4 " + bool + " " + time);
 		}else if(task == 5 || task == 6){
-			String t = task == 5 ? "5 KeyPress -> " : "6 KeyRelease -> ";
-			tasks.add(t + "");
-			tasks.add(x + "");
-			tasks.add(bool + "");
-			tasks.add(time + "");
+			tasks.add((task == 5 ? "KeyPress -> 5" : "KeyRelease -> 6") + " " + x + " " + bool + " " + time);
 		}
 	}
 
-	public void nativeMousePressed(NativeMouseEvent e) { //1 Click
+	public void nativeMousePressed(NativeMouseEvent e) { //1 Click	
 		System.out.println("Mouse press: (" + e.getButton() + ") " + e.getX() + " , " + e.getY());
 		if(!runnin) start();
 		Integer ee = e.getX();
@@ -207,8 +193,14 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		add(x, e.getY(), e.getButton(), 1, false, System.currentTimeMillis() - startTime);
 	}
 
-	public void nativeMouseDragged(NativeMouseEvent e) { //2 Drag
+	public void nativeMouseMoved(NativeMouseEvent e) {
 		System.out.println("Mouse Moved: " + e.getX() + ", " + e.getY());
+		if(!runnin) start();
+		add(e.getX(), e.getY(), 1 /* keep it to left click for now */, 2, false, System.currentTimeMillis() - startTime);
+	}
+
+	public void nativeMouseDragged(NativeMouseEvent e) { //2 Drag
+		System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
 		if(!runnin) start();
 		add(e.getX(), e.getY(), 1 /* keep it to left click for now */, 2, false, System.currentTimeMillis() - startTime);
 	}
@@ -242,7 +234,6 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 			try {
 				
-				writer.write(num + "\n");
 				for(String act: tasks){
 					writer.write(act + "\n");
 				}
