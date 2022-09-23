@@ -12,3 +12,8 @@ mouse clicks, drags, keyboard press, and scroll (with a mouse).
 Side note: learn what the keyword static really does, or it will wreak
 havoc and waste hours of your time trying figure out why a parameter 
 variable for one object changed when a new object was created. :)
+
+9/23/22 - I had homework and I was tired yesterday so I didn't do
+anything. Trash button still doesn't work but recording and playing
+were improved and work phenomenally. Great progress. Macro Master V2 
+is smooth like butter. B)
