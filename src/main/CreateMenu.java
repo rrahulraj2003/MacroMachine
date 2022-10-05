@@ -12,11 +12,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.Timer;
 import java.awt.event.*;
@@ -143,18 +141,14 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 	
 	}
 
-	public static boolean originalName(String str, File file){
-		try (Scanner s = new Scanner(file)) {
-
-			while(s.hasNextLine()){
-				if(str.toLowerCase().equals(s.nextLine().toLowerCase())){
-					return false;
-				}
+	public static boolean originalName(String str){
+		
+		for(final File fileEntry : Main.folder.listFiles()){
+			if(fileEntry.getName().substring(0, fileEntry.getName().length() - 4).toUpperCase().toLowerCase().equals(str.toUpperCase().toLowerCase())){
+				return false;
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
+
 		return true;
 	}
 
@@ -295,11 +289,14 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 		GlobalScreen.addNativeKeyListener(new CreateMenu());
 	}
 
+	String name = "";
+
 	public static boolean saveMacro(boolean diff){
+		System.out.println("1. " + namefield.getText());
 		if(!validName(namefield.getText()) || namefield.getText().toString().equals("")){
 			JOptionPane.showMessageDialog(Main.frame, "Please enter a valid name", "Invalid Macro", JOptionPane.ERROR_MESSAGE);
 			if(diff) return true;
-		}else if(originalName(namefield.getText(), Main.directory)){
+		}else if(originalName(namefield.getText())){
 			
 			macro = new File(Main.folder.getPath() + "\\" + namefield.getText() + ".txt");
 			try {
@@ -317,29 +314,14 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				e.printStackTrace();
 			}
 
-				JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(Main.frame, "Macro Successfully Created.", "Success", JOptionPane.INFORMATION_MESSAGE);
 				
-			
+			Main.resetInfoBar(namefield.getText());
 
-			Main.addToDirectory(namefield.getText());
-
-			if(diff) return false;
-			
-			try {
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			Main.showGeneral();
 			namefield.setText("");
 			infofield.setText("");
-			//recorded.setText("");
-			Main.revert();
-			Main.frame.pack();
 
 		}else{
-
 			JOptionPane.showMessageDialog(Main.frame, "Name already exists.", "Copycat Macro", JOptionPane.ERROR_MESSAGE);
 			if(diff) return true;
 		}
@@ -489,7 +471,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 
 		Timer timer = new Timer();
 
-		ActionListener recording = new ActionListener(){
+		record.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -542,9 +524,7 @@ public class CreateMenu extends JPanel implements NativeMouseInputListener, Nati
 				
 			}
 			
-		};
-
-		record.addActionListener(recording);
+		});
 
 		save.addActionListener(new ActionListener(){
 

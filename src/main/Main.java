@@ -19,7 +19,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 //import java.awt.image.BufferedImage;
 //import java.io.File;
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class Main{
     private static JButton bedit;
     private static JButton btrash;
 
-    public static File folder;
+    public static File folder = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\MacroMaster");;
     public static File directory;
     private static ArrayList<String> macross;
     private static String[] macros;
@@ -111,57 +110,31 @@ public class Main{
     	cardlayout.show(cpanel, "m");
     }
 
-    public static void addToDirectory(String name){
+    public static void resetInfoBar(String name){
 
-        //Add new macro name to directory
-        
-        directory.getName();
+        //Homepage filling
+        if(!folder.exists()){
+            folder.mkdirs();
+        }else{
+            macross.add(name);
 
-        File newDir = new File(folder.getPath() + "\\newdirectory.txt");
-        try {
-            newDir.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (FileWriter writer = new FileWriter(newDir)) {
-            for(String s: macross){
-                writer.write(s + "\n");
+            macros = new String[macross.size()];
+            for(int i = 0; i < macross.size(); i++){
+                macros[i] = macross.get(i);
             }
-            writer.write(name);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            list = new JList<String>(macros);
+            mainmenu.remove(scp);
+            scp = new JScrollPane(list);
+            mainmenu.add(scp);
+            mainmenu.setLayout(new GridLayout(1, 1));
+            list.setLayoutOrientation(JList.VERTICAL);
+            list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            list.setSelectionBackground(SELECTION2);
+            list.setFocusable(false);
+            scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+            frame.setVisible(true);
         }
-
-        //Someday, in the near future, optimize this absolute mess
-
-        directory = new File(newDir.getPath());
-        newDir = new File(folder.getPath() + "\\macro-directory.txt");
-        newDir.renameTo(new File(folder.getPath() + "\\newdir.txt"));
-        directory.renameTo(new File(folder.getPath() + "\\macro-directory.txt"));
-        
-        directory = new File(folder.getPath() + "\\macro-directory.txt");
-        newDir = new File(folder.getPath() + "\\newdir.txt");
-
-        newDir.delete();
-
-        //Change menu card in home layout
-        macross.add(name);
-        macros = new String[macross.size()];
-        for(int i = 0; i < macross.size(); i++){
-            macros[i] = macross.get(i);
-        }
-        list.setListData(macros);
-        mainmenu.remove(scp);
-        scp = new JScrollPane(list);
-        mainmenu.add(scp);
-        mainmenu.setLayout(new GridLayout(1, 1));
-        list.setLayoutOrientation(JList.VERTICAL);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setFocusable(false);
-        list.setSelectionBackground(SELECTION2);
-        scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-        frame.setVisible(true);
 
     }
 
@@ -358,43 +331,28 @@ public class Main{
         //Frame is packing
         frame.pack();
 
-        //File Choosing Process
-        JOptionPane.showMessageDialog(frame, "Please select a folder of your\n" + "choice to store your macros.", "Macro Initiation", JOptionPane.INFORMATION_MESSAGE);
-        JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.showOpenDialog(frame);
-        folder = fc.getSelectedFile();
-
         //Homepage filling
-        if(folder == null){
-            System.exit(0);
+        if(!folder.exists()){
+            folder.mkdirs();
         }else{
-            directory = new File(folder.getPath() + "\\macro-directory.txt");
-
-            if(!directory.exists()){
-                directory.createNewFile();
-            }else{
-                Scanner s = new Scanner(directory);
-                while(s.hasNextLine()){
-                    macross.add(s.nextLine());
-                }
-                s.close();
-
-                macros = new String[macross.size()];
-                for(int i = 0; i < macross.size(); i++){
-                    macros[i] = macross.get(i);
-                }
-                list = new JList<String>(macros);
-                scp = new JScrollPane(list);
-                mainmenu.add(scp);
-                mainmenu.setLayout(new GridLayout(1, 1));
-                list.setLayoutOrientation(JList.VERTICAL);
-                list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-                list.setSelectionBackground(SELECTION2);
-                list.setFocusable(false);
-                scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
-                frame.setVisible(true);
+            for(final File fileEntry : folder.listFiles()){
+                macross.add(fileEntry.getName().substring(0, fileEntry.getName().length() - 4));
             }
+
+            macros = new String[macross.size()];
+            for(int i = 0; i < macross.size(); i++){
+                macros[i] = macross.get(i);
+            }
+            list = new JList<String>(macros);
+            scp = new JScrollPane(list);
+            mainmenu.add(scp);
+            mainmenu.setLayout(new GridLayout(1, 1));
+            list.setLayoutOrientation(JList.VERTICAL);
+            list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            list.setSelectionBackground(SELECTION2);
+            list.setFocusable(false);
+            scp.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, SKY));
+            frame.setVisible(true);
         }
 
         //Changing infobar to display info of selected
